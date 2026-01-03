@@ -187,6 +187,13 @@ export default function PropertyRenovationPlannerPage() {
     const approvalOdds = calculateApprovalOdds(ltv, newDSR / 100, ctosScore, downPaymentPercent)
     
     return {
+      homeLoan: {
+        amount: propertyPrice - downPayment,
+        rate: homeRate,
+        tenure: homeLoanTenure,
+        monthlyPayment: calculateMonthlyPayment(propertyPrice - downPayment, homeRate, homeLoanTenure),
+        totalInterest: calculateTotalInterest(calculateMonthlyPayment(propertyPrice - downPayment, homeRate, homeLoanTenure), homeLoanTenure, propertyPrice - downPayment)
+      },
       combined: {
         amount: combinedAmount,
         rate: homeRate,
