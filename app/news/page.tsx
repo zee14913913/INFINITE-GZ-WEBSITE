@@ -53,7 +53,7 @@ export default function NewsPage() {
               {newsItems.map((news) => (
                 <Link
                   key={news.id}
-                  href="#"
+                  href={`/news/${news.id}`}
                   className="group p-8 border border-border rounded-lg hover:border-primary/30 hover:bg-secondary/5 transition-all space-y-6"
                 >
                   <div className="mono-tag text-xs text-secondary">{news.category}</div>

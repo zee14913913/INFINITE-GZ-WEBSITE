@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Professional loan affordability calculator for Malaysia. Calculate your borrowing capacity across personal loans, housing loans, vehicle financing, and credit cards.">
+  <title>Loan Affordability Calculator | INFINITE GZ</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <div class="brand">
+          <h1 class="brand-title">INFINITE GZ</h1>
+          <p class="brand-subtitle" data-i18n="header.subtitle">Loan Affordability Calculator</p>
+        </div>
+        <div class="language-switcher">
+          <button class="lang-btn active" data-lang="en" aria-label="English">English</button>
+          <button class="lang-btn" data-lang="zh" aria-label="简体中文">中文</button>
+          <button class="lang-btn" data-lang="ms" aria-label="Bahasa Malaysia">Malay</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main">
+      <!-- Input Panel - Large Centered Card -->
+      <section class="input-panel">
+        <div class="panel-header">
+          <h2 data-i18n="input.title">Financial Information</h2>
+          <p class="panel-description" data-i18n="input.description">Enter your financial details to calculate your borrowing capacity</p>
+        </div>
+
+        <form id="calculator-form" class="calculator-form">
+          <!-- Monthly Gross Income -->
+          <div class="form-group">
+            <label for="monthly-income" data-i18n="input.monthlyIncome.label">Monthly Gross Income (RM)</label>
+            <div class="input-wrapper">
+              <input 
+                type="number" 
+                id="monthly-income" 
+                name="monthlyIncome"
+                min="0" 
+                step="100" 
+                value="5000"
+                required
+                class="form-input"
+                data-i18n-placeholder="input.monthlyIncome.placeholder"
+              >
+              <span class="input-suffix">RM</span>
+            </div>
+            <p class="input-help" data-i18n="input.monthlyIncome.help">Your total monthly income before deductions</p>
+          </div>
+
+          <!-- Existing Monthly Commitments -->
+          <div class="form-group">
+            <label for="existing-commitments" data-i18n="input.existingCommitments.label">Existing Monthly Commitments (RM)</label>
+            <div class="input-wrapper">
+              <input 
+                type="number" 
+                id="existing-commitments" 
+                name="existingCommitments"
+                min="0" 
+                step="100" 
+                value="2000"
+                required
+                class="form-input"
+                data-i18n-placeholder="input.existingCommitments.placeholder"
+              >
+              <span class="input-suffix">RM</span>
+            </div>
+            <p class="input-help" data-i18n="input.existingCommitments.help">All current debt obligations (loans, credit cards, etc.)</p>
+          </div>
+
+          <!-- Maximum DSR Tolerance -->
+          <div class="form-group">
+            <label for="max-dsr" data-i18n="input.maxDSR.label">Maximum DSR Tolerance (%)</label>
+            <select id="max-dsr" name="maxDSR" class="form-select" required>
+              <option value="40">40%</option>
+              <option value="50">50%</option>
+              <option value="60" selected>60%</option>
+              <option value="70">70%</option>
+            </select>
+            <p class="input-help" data-i18n="input.maxDSR.help">Debt Service Ratio limit. Most banks use 60% as standard.</p>
+          </div>
+
+          <!-- Loan Tenure -->
+          <div class="form-group">
+            <label for="loan-tenure" data-i18n="input.tenure.label">Loan Tenure (years)</label>
+            <select id="loan-tenure" name="tenure" class="form-select" required>
+              <option value="1">1 year</option>
+              <option value="2">2 years</option>
+              <option value="3">3 years</option>
+              <option value="5" selected>5 years</option>
+              <option value="7">7 years</option>
+              <option value="10">10 years</option>
+              <option value="15">15 years</option>
+              <option value="20">20 years</option>
+              <option value="25">25 years</option>
+              <option value="30">30 years</option>
+            </select>
+            <p class="input-help" data-i18n="input.tenure.help">Repayment period for the loan</p>
+          </div>
+
+          <!-- Annual Interest Rate -->
+          <div class="form-group">
+            <label for="interest-rate" data-i18n="input.interestRate.label">Annual Interest Rate (% p.a.)</label>
+            <div class="input-wrapper">
+              <input 
+                type="number" 
+                id="interest-rate" 
+                name="interestRate"
+                min="0" 
+                max="30" 
+                step="0.1" 
+                value="8.0"
+                required
+                class="form-input"
+                data-i18n-placeholder="input.interestRate.placeholder"
+              >
+              <span class="input-suffix">%</span>
+            </div>
+            <p class="input-help" data-i18n="input.interestRate.help">Annual percentage rate for the loan</p>
+          </div>
+
+          <!-- Calculate Button -->
+          <button type="submit" class="btn-calculate" data-i18n="input.calculate">Calculate</button>
+        </form>
+
+        <!-- DSR Info Box -->
+        <div class="info-box">
+          <div class="info-icon">
+            <i data-feather="info"></i>
+          </div>
+          <div class="info-content">
+            <h3 data-i18n="info.dsr.title">What is DSR?</h3>
+            <p data-i18n="info.dsr.description">Debt Service Ratio (DSR) is the percentage of your monthly income used to service debt. Banks typically approve loans if your total DSR stays below 60-70%.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results Panel -->
+      <section class="results-panel" id="results-panel" style="display: none;">
+        <div class="panel-header">
+          <h2 data-i18n="results.title">Your Borrowing Capacity</h2>
+          <p class="panel-description" data-i18n="results.description">Based on your inputs, here are your estimates:</p>
+        </div>
+
+        <div class="results-grid" id="results-grid">
+          <!-- Results will be dynamically inserted here -->
+        </div>
+
+        <!-- Current DSR Summary -->
+        <div class="dsr-summary" id="dsr-summary">
+          <div class="summary-item">
+            <span class="summary-label" data-i18n="summary.currentDSR">Current DSR:</span>
+            <span class="summary-value" id="current-dsr">--</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label" data-i18n="summary.availableDSR">Available DSR Headroom:</span>
+            <span class="summary-value" id="available-dsr">--</span>
+          </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+          <i data-feather="alert-circle" class="disclaimer-icon"></i>
+          <p data-i18n="disclaimer.text">This calculator provides estimates only and does not constitute a formal credit offer. Actual borrowing capacity is subject to individual financial institutions' policies, credit assessment, and regulatory requirements.</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p data-i18n="footer.text">© 2025 INFINITE GZ. Professional financial advisory services in Malaysia.</p>
+      <div class="footer-links">
+        <a href="/" data-i18n="footer.home">Home</a>
+        <a href="/contact" data-i18n="footer.contact">Contact Us</a>
+        <a href="/resources" data-i18n="footer.resources">Resources</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Initialize Feather Icons
+    feather.replace();
+  </script>
+</body>
+</html>
+

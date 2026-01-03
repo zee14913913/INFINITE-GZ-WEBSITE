@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test - Loan Calculator</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #000;
+      color: #fff;
+      padding: 40px;
+    }
+    .test-item {
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid #3f3f46;
+      border-radius: 8px;
+    }
+    .success { color: #059669; }
+    .error { color: #dc2626; }
+  </style>
+</head>
+<body>
+  <h1>Loan Calculator - File Test</h1>
+  
+  <div class="test-item">
+    <h2>File Check:</h2>
+    <p id="css-check">Checking styles.css...</p>
+    <p id="js-check">Checking script.js...</p>
+  </div>
+
+  <div class="test-item">
+    <h2>Instructions:</h2>
+    <ol>
+      <li>If you see this page, HTML is loading correctly</li>
+      <li>Check browser console (F12) for any errors</li>
+      <li>Make sure all files are in the same directory:
+        <ul>
+          <li>index.html</li>
+          <li>styles.css</li>
+          <li>script.js</li>
+        </ul>
+      </li>
+      <li>Try opening index.html directly in browser</li>
+    </ol>
+  </div>
+
+  <div class="test-item">
+    <h2>Quick Links:</h2>
+    <p><a href="index.html" style="color: #fff; text-decoration: underline;">Open Calculator (index.html)</a></p>
+  </div>
+
+  <script>
+    // Test CSS file
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'styles.css';
+    link.onload = () => {
+      document.getElementById('css-check').innerHTML = '<span class="success">✅ styles.css loaded successfully</span>';
+    };
+    link.onerror = () => {
+      document.getElementById('css-check').innerHTML = '<span class="error">❌ styles.css failed to load</span>';
+    };
+    document.head.appendChild(link);
+
+    // Test JS file
+    const script = document.createElement('script');
+    script.src = 'script.js';
+    script.onload = () => {
+      document.getElementById('js-check').innerHTML = '<span class="success">✅ script.js loaded successfully</span>';
+    };
+    script.onerror = () => {
+      document.getElementById('js-check').innerHTML = '<span class="error">❌ script.js failed to load</span>';
+    };
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>
+

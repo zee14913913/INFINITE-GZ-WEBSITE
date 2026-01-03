@@ -116,6 +116,16 @@ export default function Header() {
                 {t.nav.resources}
               </Link>
               <Link 
+                href="/loan-calculator" 
+                className="nav-link-glow"
+                style={{
+                  color: 'rgb(245, 245, 245)',
+                  textShadow: '0 0 8px rgba(255, 255, 255, 0.3)'
+                }}
+              >
+                {t.nav.calculator}
+              </Link>
+              <Link 
                 href="/careers" 
                 className="nav-link-glow"
                 style={{

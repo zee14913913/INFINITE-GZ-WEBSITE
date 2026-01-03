@@ -80,27 +80,27 @@ export default function Footer() {
                   <span className="mono-tag text-sm">{t.home.footer.sections.products}</span>
                 </div>
                 <div>
-                  <Link href="#products" className="hover:underline">
+                  <Link href="/creditpilot" className="hover:underline">
                     {t.home.footer.links.creditpilot}
                   </Link>
                 </div>
                 <div>
-                  <Link href="#products" className="hover:underline">
+                  <Link href="/advisory" className="hover:underline">
                     {t.home.footer.links.advisory}
                   </Link>
                 </div>
                 <div>
-                  <Link href="#products" className="hover:underline">
+                  <Link href="/credit-card-management" className="hover:underline">
                     {t.home.footer.links.creditCard}
                   </Link>
                 </div>
                 <div>
-                  <Link href="#products" className="hover:underline">
+                  <Link href="/solutions" className="hover:underline">
                     {t.home.footer.links.digital}
                   </Link>
                 </div>
                 <div>
-                  <Link href="#products" className="hover:underline">
+                  <Link href="/solutions" className="hover:underline">
                     {t.home.footer.links.accounting}
                   </Link>
                 </div>
@@ -114,12 +114,12 @@ export default function Footer() {
                   <span className="mono-tag text-sm">{t.home.footer.sections.company}</span>
                 </div>
                 <div>
-                  <Link href="#company" className="hover:underline">
+                  <Link href="/company" className="hover:underline">
                     {t.home.footer.links.about}
                   </Link>
                 </div>
                 <div>
-                  <Link href="#company" className="hover:underline">
+                  <Link href="/careers" className="hover:underline">
                     {t.home.footer.links.careers}
                   </Link>
                 </div>
@@ -129,12 +129,12 @@ export default function Footer() {
                   </Link>
                 </div>
                 <div>
-                  <Link href="#resources" className="hover:underline">
+                  <Link href="/news" className="hover:underline">
                     {t.home.footer.links.newsUpdates}
                   </Link>
                 </div>
                 <div>
-                  <Link href="#company" className="hover:underline">
+                  <Link href="/company" className="hover:underline">
                     {t.home.footer.links.partners}
                   </Link>
                 </div>

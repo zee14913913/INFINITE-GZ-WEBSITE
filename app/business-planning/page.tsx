@@ -112,23 +112,23 @@ export default function BusinessPlanningPage() {
           {/* Tag */}
           <div className="inline-block mb-6">
             <span className="px-4 py-2 bg-zinc-950/50 border border-zinc-800 rounded-full text-white text-sm font-semibold inline-flex items-center gap-2"><FileText className="w-4 h-4" />
-              Professional Document Delivery
+              {t.businessPlanning.hero.tag}
             </span>
           </div>
 
           {/* Title */}
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-black bg-clip-text text-transparent">
-            Your Business Plan,<br />Done by Professionals
+            {t.businessPlanning.hero.title}
           </h1>
 
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            85% Loan Approval Rate | Bilingual | 7-14 Days Delivery
+            {t.businessPlanning.hero.subtitle}
           </p>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
-            {successMetrics.map((stat, index) => (
+            {t.businessPlanning.hero.stats.map((stat, index) => (
               <div key={index} className="p-4 bg-zinc-950/50/50 backdrop-blur border border-zinc-800 rounded-lg">
                 <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.value}</div>
                 <div className="text-xs text-muted-foreground mb-1">{stat.label}</div>
@@ -143,14 +143,14 @@ export default function BusinessPlanningPage() {
               href="#packages"
               className="group px-8 py-4 bg-primary text-background font-bold rounded-full hover:shadow-lg hover:shadow-primary/50 transition-all inline-flex items-center justify-center gap-2"
             >
-              View Packages
+              {t.businessPlanning.hero.cta1}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
             <a
               href="#samples"
               className="px-8 py-4 bg-muted text-foreground font-bold rounded-full hover:bg-muted/80 transition-all inline-flex items-center justify-center gap-2"
             >
-              View Sample BP
+              {t.businessPlanning.hero.cta2}
             </a>
           </div>
         </div>
@@ -172,13 +172,13 @@ export default function BusinessPlanningPage() {
           {/* Section Header */}
           <div className="text-center mb-16">
             <span className="px-4 py-2 bg-zinc-950/50 border border-zinc-800 rounded-full text-white text-sm font-semibold inline-block mb-4">
-              Document Gallery
+              {t.businessPlanning.samples.tag}
             </span>
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              See What You'll Receive
+              {t.businessPlanning.samples.title}
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Real business plan samples from different industries
+              {t.businessPlanning.samples.description}
             </p>
           </div>
 
@@ -445,9 +445,9 @@ export default function BusinessPlanningPage() {
           {/* Money Back Guarantee */}
           <div className="max-w-3xl mx-auto mt-12 p-6 bg-zinc-950/50 border border-zinc-800 rounded-xl text-center">
             <Shield className="w-12 h-12 text-white mx-auto mb-3" />
-            <h3 className="text-lg font-bold mb-2">100% Satisfaction Guarantee</h3>
+            <h3 className="text-lg font-bold mb-2">{t.businessPlanning.guarantee.title}</h3>
             <p className="text-sm text-muted-foreground">
-              If your loan is rejected due to BP quality issues, we'll refund 50% of your payment
+              {t.businessPlanning.guarantee.description}
             </p>
           </div>
         </div>
@@ -463,13 +463,13 @@ export default function BusinessPlanningPage() {
           <div className="text-center mb-16">
             <span className="px-4 py-2 bg-zinc-950/50 border border-zinc-800 rounded-full text-white text-sm font-semibold inline-flex items-center gap-2 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-lightbulb"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
-              Real Transformation
+              {t.businessPlanning.caseStudy.tag}
             </span>
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              From Rejection to Approval
+              {t.businessPlanning.caseStudy.title}
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              How we turned a rejected application into RM 500K approval
+              {t.businessPlanning.caseStudy.description}
             </p>
           </div>
 
@@ -604,42 +604,21 @@ export default function BusinessPlanningPage() {
             {/* Section Header */}
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                Frequently Asked Questions
+              {t.businessPlanning.faq.title}
               </h2>
             </div>
 
             {/* FAQ Items */}
             <div className="space-y-6">
-              {[
-                {
-                  q: "I don't know how to write financial projections, what do I do?",
-                  a: "We do it for you! Just provide your historical data (if any) and business goals. Our team will create professional 3-year financial projections with detailed assumptions."
-                },
-                {
-                  q: "What if the bank rejects my BP after I paid?",
-                  a: "We offer 1 FREE revision for Professional & Premium packages. If rejection is due to BP quality issues (not your business fundamentals), we refund 50% of your payment."
-                },
-                {
-                  q: "Can I buy only the financial model without the full BP?",
-                  a: "Yes! We offer standalone financial modeling service at RM 1,500. However, we recommend the full BP package for better bank approval chances."
-                },
-                {
-                  q: "Do you provide Chinese AND English versions?",
-                  a: "Basic package includes Chinese version only. Professional includes English version. Premium includes both in a single integrated document."
-                },
-                {
-                  q: "How long does the approval process take?",
-                  a: "Based on our 500+ clients: Average 21-25 days for approval (vs market average 45 days). Some clients get approved in as fast as 18 days."
-                }
-              ].map((faq, index) => (
+              {t.businessPlanning.faq.items.map((faq, index) => (
                 <div key={index} className="bg-zinc-950/50/80 backdrop-blur border border-zinc-800 rounded-xl p-6 hover:border-zinc-800/50 transition-all">
                   <h3 className="text-lg font-bold mb-3 flex items-start gap-3">
                     <span className="text-white">Q:</span>
-                    <span>{faq.q}</span>
+                    <span>{faq.question}</span>
                   </h3>
                   <div className="flex items-start gap-3 text-muted-foreground">
                     <span className="text-white font-bold">A:</span>
-                    <p className="text-sm">{faq.a}</p>
+                    <p className="text-sm">{faq.answer}</p>
                   </div>
                 </div>
               ))}

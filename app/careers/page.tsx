@@ -86,7 +86,7 @@ export default function CareersPage() {
               {t.careers.jobs.positions.map((job, index) => (
                 <Link
                   key={index}
-                  href="#"
+                  href={`mailto:careers@infinitegz.com?subject=Application for ${encodeURIComponent(job.title)}`}
                   className="block p-6 border border-border rounded-lg hover:border-primary/30 hover:bg-secondary/5 transition-all group"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
