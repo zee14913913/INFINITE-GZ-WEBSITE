@@ -30,12 +30,7 @@ export default function SolutionsPage() {
             variant: 'secondary',
           },
         ]}
-        contentClassName="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl flex min-h-screen flex-col justify-center"
-      >
-        <div className="py-20 text-center">
-          {/* Hero content will be rendered by PageHero */}
-        </div>
-      </PageHero>
+      />
 
       {/* Product Cards Section */}
       <SectionContainer className="py-16 sm:py-24 relative" containerClassName="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl">
