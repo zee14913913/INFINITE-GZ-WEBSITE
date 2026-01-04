@@ -1736,8 +1736,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'AI-Powered Loan Matching',
-        title: 'Stop Applying To Banks That Will Reject You. We Show You Which Banks Will Actually Approve.',
-        subtitle: '2-Minute Free Analysis. See Your DSR, Get Bank Recommendations, Know Your Approval Chances - Before You Waste Time Applying.',
+        title: 'Smart Bank Matching. Get Approved.',
+        subtitle: '2-minute free analysis. Know your approval chances.',
         cta1: 'Start Free Analysis',
         cta2: 'Learn More',
       },
@@ -1794,8 +1794,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Complete Financial Solutions',
-        title: '8 Business Services - Completely FREE For Loan Clients',
-        description: 'Most loan agents just help you fill forms. We do more: DSR optimization, debt consolidation, business planning, e-commerce setup, accounting, tax optimization - all FREE when you get a loan through us. Your success is our success.',
+        title: '8 Free Services For Loan Clients',
+        description: 'DSR optimization, debt consolidation, business planning, e-commerce, accounting, tax optimization - all FREE with your loan.',
       },
       services: {
         tag: '8 Core Services',
@@ -1876,8 +1876,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Financial Solutions for all Malaysian businesses',
-        title: 'Loan Rejected? DSR Too High? We Fix Everything - Then Get You Approved.',
-        description: 'Most loan agents just fill forms. We do more: DSR optimization, debt consolidation, business planning, e-commerce setup, accounting, tax optimization - all FREE when you get a loan through us. We make your business loan-ready, then match you with banks that will actually approve. Zero upfront fees. Success-based pricing only.',
+        title: 'Fix DSR. Get Approved.',
+        description: 'We optimize your DSR, consolidate debt, and match you with the right banks. Zero upfront fees.',
       },
       products: [
         {
@@ -2048,8 +2048,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Professional Credit Card Management',
-        title: 'Stop Missing Payments. Save RM 1,200-5,000/Year. Boost Your Credit Score.',
-        subtitle: 'Malaysian credit card debt: RM 50.7B. RM 551.8M overdue (1.1%). Late payment = RM 150-300 penalty + credit score damage. We fix it.',
+        title: 'Never Miss A Payment. Save Thousands.',
+        subtitle: 'Professional payment management. Save RM 1,200-5,000/year.',
         description: 'Never miss a payment again. Maximize rewards. Improve credit score. All managed professionally.',
         cta1: 'Free Consultation',
         cta2: 'Calculate My Potential',
@@ -2255,8 +2255,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Professional Financial Optimization',
-        title: 'DSR Too High? We Optimize It, Then Match You With Banks That Will Approve.',
-        subtitle: 'Stop Applying To Banks That Will Reject You. We Analyze Your DSR, Optimize Your Debt Structure, Then Show You Which 3 Banks Will Actually Approve.',
+        title: 'Optimize DSR. Get Approved.',
+        subtitle: 'We analyze your DSR, optimize debt, and match you with the right banks.',
         description: 'Based on real 2025 standards from 8 major Malaysian banks (Maybank, CIMB, Hong Leong, RHB, etc.). 60% of loan applications are rejected because DSR exceeds bank limits. We fix it BEFORE you apply. Average approval rate improvement: 60-80%. Average loan capacity increase: RM 100K-500K.',
         cta1: 'Free DSR Assessment',
         cta2: 'WhatsApp Consultation',
@@ -2531,8 +2531,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'About Us',
-        title: 'We Fix Financing Problems Before Banks Say No',
-        description: 'INFINITE GZ is not just another loan agent. We optimize your DSR, consolidate your debt, plan your taxes, and match you with banks that will actually approve - all before you apply. 500+ businesses trust us. Average approval rate: 84.2%. Average approval time: 21 days (vs market 45 days).',
+        title: 'Fix Problems Before Banks Say No',
+        description: 'We optimize DSR, consolidate debt, and match you with banks. 500+ businesses trust us. 84.2% approval rate. 21 days average.',
       },
       mission: {
         tag: 'Our Mission',
@@ -2577,8 +2577,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Success Stories & Updates',
-        title: 'Real Clients, Real Results: How We Help Businesses Get Approved',
-        description: '500+ clients. RM 500M+ facilitated. 84.2% approval rate vs market 40%. Average approval time: 21-25 days vs market 45 days. Average extra loan capacity unlocked: RM 150K per client. Read how we helped businesses overcome DSR issues, consolidate debt, and secure financing that traditional agents couldn\'t deliver.',
+        title: 'Real Clients, Real Results',
+        description: '500+ clients. RM 500M+ facilitated. 84.2% approval rate. Read success stories.',
       },
 
       items: [
@@ -2598,8 +2598,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Technology Infrastructure',
-        title: '50+ Banks. Real-Time Data. 98% Match Accuracy. This Is How We Get You Approved.',
-        description: 'Most loan agents use outdated product lists. We use real-time data from 50+ Malaysian banks, AI algorithms that analyze 8 banks\' DSR standards, and intelligent matching that shows you which banks will actually approve - not reject. Real result: 84.2% approval rate vs market average 40%. Average approval time: 21-25 days vs market 45 days. Average extra loan capacity unlocked: RM 150K per client.',
+        title: '50+ Banks. Real-Time Data. 98% Accuracy.',
+        description: 'Real-time data from 50+ banks. 84.2% approval rate. 21-25 days average.',
       },
 
       stats: [
@@ -2628,7 +2628,7 @@ export const translations: Record<Language, Translations> = {
       hero: {
         tag: 'Join Our Team',
         title: 'Build The Future Of Finance',
-        description: 'Join a fast-growing fintech company that\'s transforming how Malaysian SMEs and individuals access financing. 500+ clients. RM 500M+ facilitated. 84.2% approval rate vs market 40%. We\'re building the future of financial services - and we need talented people like you.',
+        description: 'Join a fast-growing fintech. 500+ clients. RM 500M+ facilitated. 84.2% approval rate.',
       },
       benefits: {
         tag: 'Benefits',
@@ -2688,7 +2688,7 @@ export const translations: Record<Language, Translations> = {
       hero: {
         tag: 'FAQ',
         title: 'Frequently Asked Questions',
-        description: 'Real questions from real clients. Get honest answers about fees, success rates, timelines, and what happens if things don\'t work out.',
+        description: 'Real questions from real clients. Honest answers about fees, success rates, and timelines.',
       },
       items: [
         {
@@ -4098,8 +4098,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'AI智能贷款匹配',
-        title: '智能贷款匹配',
-        subtitle: '2分钟免费分析。查看您的DSR，获得银行推荐，了解批准概率 - 在您浪费时间申请之前。',
+        title: '智能银行匹配。获得批准。',
+        subtitle: '2分钟免费分析。了解您的批准概率。',
         cta1: '开始免费分析',
         cta2: '了解更多',
       },
@@ -4156,8 +4156,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: '完整金融解决方案',
-        title: '免费业务服务',
-        description: '大多数贷款agent只帮您填表。我们做得更多：DSR优化、债务整合、商业计划、电商建设、会计、税务优化 - 通过我们获得贷款，全部免费。您的成功就是我们的成功。',
+        title: '8项免费服务',
+        description: 'DSR优化、债务整合、商业计划、电商、会计、税务优化 - 贷款客户全部免费。',
       },
       services: {
         tag: '8大核心服务',
@@ -4238,8 +4238,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: '为所有马来西亚企业提供金融解决方案',
-        title: '贷款解决方案',
-        description: '大多数贷款agent只帮您填表。我们做得更多：DSR优化、债务整合、商业计划、电商建设、会计、税务优化 - 通过我们获得贷款，全部免费。我们让您的业务符合贷款条件，然后匹配会真正批准您的银行。零前期费用。仅基于成功的定价。',
+        title: '优化DSR。获得批准。',
+        description: '我们优化您的DSR，整合债务，匹配正确的银行。零前期费用。',
       },
       products: [
         {
