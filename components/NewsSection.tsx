@@ -6,10 +6,10 @@ import { useLanguage } from '@/contexts/LanguageContext'
 export default function NewsSection() {
   const { t } = useLanguage()
   const { elementRef: sectionRef, isVisible } = useScrollAnimation({ threshold: 0.1, triggerOnce: true })
-  
+
   return (
-    <section 
-      id="resources" 
+    <section
+      id="resources"
       ref={sectionRef as any}
       className="min-h-screen flex items-center py-16 sm:py-32 bg-background snap-section relative"
     >
@@ -17,9 +17,9 @@ export default function NewsSection() {
       <div className="absolute top-0 left-0 right-0">
         <div className="laser-divider"></div>
       </div>
-      <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl space-y-16">
+      <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl">
         {/* Section 标题 */}
-        <div className={`space-y-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`space-y-4 transition-all duration-700 mb-48 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="mono-tag text-secondary">
             {t.home.news.tag}
           </div>
@@ -79,7 +79,7 @@ export default function NewsSection() {
           </button>
         </div>
       </div>
-      
+
       {/* 底部激光分隔线 */}
       <div className="absolute bottom-0 left-0 right-0">
         <div className="laser-divider"></div>
