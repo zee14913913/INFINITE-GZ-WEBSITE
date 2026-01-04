@@ -1,9 +1,9 @@
 import React from 'react';
-import { 
-  CreditCard, 
-  Bell, 
-  ShoppingCart, 
-  TrendingUp, 
+import {
+  CreditCard,
+  Bell,
+  ShoppingCart,
+  TrendingUp,
   LifeBuoy,
   AlertTriangle,
   Clock,
@@ -26,7 +26,7 @@ export interface Translations {
     calculator: string;
     loanOptimizer: string;
   };
-  
+
   // Common
   common: {
     learnMore: string;
@@ -41,13 +41,17 @@ export interface Translations {
     viewDetails: string;
     useCreditPilot: string;
   };
-  
+
   // Home Page
   home: {
     hero: {
       title: string;
+      titleLine1?: string;
+      titleLine2?: string;
       subtitle: string;
       description: string;
+      descriptionLine1?: string;
+      descriptionLine2?: string;
       bottomDescription: string;
     };
     products: {
@@ -120,7 +124,7 @@ export interface Translations {
       };
     };
   };
-  
+
   // CreditPilot Page
   creditpilot: {
     meta: {
@@ -157,7 +161,7 @@ export interface Translations {
       buttonText: string;
     };
   };
-  
+
   // Advisory Page
   advisory: {
     meta: {
@@ -192,7 +196,7 @@ export interface Translations {
       description: string;
     };
   };
-  
+
   // Solutions Page
   solutions: {
     meta: {
@@ -255,7 +259,7 @@ export interface Translations {
       description: string;
     };
   };
-  
+
   // Credit Card Management Page
   creditCard: {
     meta: {
@@ -346,7 +350,7 @@ export interface Translations {
       relatedServices: string;
     };
   };
-  
+
   // Company Page
   company: {
     meta: {
@@ -377,7 +381,7 @@ export interface Translations {
       description: string;
     };
   };
-  
+
   // News Page
   news: {
     meta: {
@@ -395,7 +399,7 @@ export interface Translations {
       category: string;
     }>;
   };
-  
+
   // Resources Page
   resources: {
     meta: {
@@ -422,7 +426,7 @@ export interface Translations {
       }>;
     };
   };
-  
+
   // Careers Page
   careers: {
     meta: {
@@ -458,7 +462,7 @@ export interface Translations {
       description: string;
     };
   };
-  
+
   // FAQ Page
   faq: {
     hero: {
@@ -477,7 +481,7 @@ export interface Translations {
       visitPortal: string;
     };
   };
-  
+
   // Privacy Policy Page
   privacy: {
     hero: {
@@ -517,7 +521,7 @@ export interface Translations {
       };
     };
   };
-  
+
   // Terms of Service Page
   terms: {
     hero: {
@@ -559,7 +563,7 @@ export interface Translations {
       };
     };
   };
-  
+
   // Legal Notice Page
   legal: {
     hero: {
@@ -599,7 +603,7 @@ export interface Translations {
       };
     };
   };
-  
+
   // DSR Guide Page
   dsrGuide: {
     hero: {
@@ -653,7 +657,7 @@ export interface Translations {
       };
     };
   };
-  
+
   // Tax Tips Page
   taxTips: {
     hero: {
@@ -694,7 +698,7 @@ export interface Translations {
       };
     };
   };
-  
+
   // Credit Card Management Page
     loanCalculator: {
       header: {
@@ -1362,7 +1366,7 @@ export interface Translations {
       }>;
     };
   };
-  
+
   // Financial Optimization Page
   financialOptimization: {
     meta: {
@@ -1435,7 +1439,7 @@ export interface Translations {
       cta2: string;
     };
   };
-  
+
   // Business Planning Page
   businessPlanning: {
     hero: {
@@ -1481,7 +1485,7 @@ export interface Translations {
       }>;
     };
   };
-  
+
   // E-commerce Solutions Page
   ecommerceSolutions: {
     hero: {
@@ -1511,7 +1515,7 @@ export interface Translations {
       description: string;
     };
   };
-  
+
   // Cash Flow Optimization Page
   cashFlowOptimization: {
     hero: {
@@ -1568,9 +1572,13 @@ export const translations: Record<Language, Translations> = {
     },
     home: {
       hero: {
-        title: 'Loan Rejected? DSR Too High? We Fix It Before You Apply.',
+        title: 'The World\'s Money, Made Yours.',
+        titleLine1: 'The World\'s Money,',
+        titleLine2: 'Made Yours.',
         subtitle: 'Smart Assessment First, Then Apply To The Right Bank',
         description: 'Stop wasting time on banks that will reject you. We analyze your DSR, optimize your debt structure, and match you with banks that will actually approve - before you apply.',
+        descriptionLine1: 'Stop wasting time on banks that will reject you. We analyze your DSR, optimize your debt structure,',
+        descriptionLine2: 'and match you with banks that will actually approve - before you apply.',
         bottomDescription: 'INFINITE GZ: Professional DSR optimization, debt consolidation, and AI-powered loan matching from 50+ Malaysian banks. Zero upfront fees. Success-based pricing only.',
       },
       products: {
@@ -2572,7 +2580,7 @@ export const translations: Record<Language, Translations> = {
         title: 'Real Clients, Real Results: How We Help Businesses Get Approved',
         description: '500+ clients. RM 500M+ facilitated. 84.2% approval rate vs market 40%. Average approval time: 21-25 days vs market 45 days. Average extra loan capacity unlocked: RM 150K per client. Read how we helped businesses overcome DSR issues, consolidate debt, and secure financing that traditional agents couldn\'t deliver.',
       },
-    
+
       items: [
         { title: 'RM 500M+ Financing Facilitated: 500+ Clients Successfully Secured Loans', date: '2024-12', category: 'Milestone' },
         { title: 'CreditPilot AI Upgrade: 98% Match Accuracy, 2-Minute Analysis', date: '2024-12', category: 'Product' },
@@ -2593,7 +2601,7 @@ export const translations: Record<Language, Translations> = {
         title: '50+ Banks. Real-Time Data. 98% Match Accuracy. This Is How We Get You Approved.',
         description: 'Most loan agents use outdated product lists. We use real-time data from 50+ Malaysian banks, AI algorithms that analyze 8 banks\' DSR standards, and intelligent matching that shows you which banks will actually approve - not reject. Real result: 84.2% approval rate vs market average 40%. Average approval time: 21-25 days vs market 45 days. Average extra loan capacity unlocked: RM 150K per client.',
       },
-    
+
       stats: [
         { number: '50+', title: 'Financial Institutions', description: 'Real-time data from Maybank, CIMB, Hong Leong, RHB, Public Bank, digital banks, and fintech companies. We know which bank approves which profile. Real example: Self-employed RM 10K/month, RHB recognizes 60% (RM 6K), Hong Leong recognizes 90% (RM 9K). We recommend Hong Leong. Result: Loan capacity difference RM 496K over 10 years.' },
         { number: 'RM 500M+', title: 'Loans Facilitated', description: 'Total financing secured for 500+ clients. Average approval time: 21-25 days (vs market 45 days). Average extra loan capacity unlocked: RM 150K per client. Real case: 40-year retail business got RM 2M loan after our optimization, revenue increased 3x in 2 years.' },
@@ -2658,7 +2666,7 @@ export const translations: Record<Language, Translations> = {
           },
         ],
       },
-    
+
       jobs: {
         tag: 'Open Positions',
         title: 'Join Our Growing Team',
@@ -3926,9 +3934,13 @@ export const translations: Record<Language, Translations> = {
     },
         home: {
       hero: {
-        title: '贷款被拒？DSR太高？我们帮您先优化，再申请。',
+        title: '世界的资金，为您所用。',
+        titleLine1: '世界的资金，',
+        titleLine2: '为您所用。',
         subtitle: '先评估，再决定申请哪一家银行',
         description: '别再浪费时间申请会拒绝您的银行。我们分析您的DSR，优化债务结构，匹配真正会批准您的银行 - 在您申请之前。',
+        descriptionLine1: '别再浪费时间申请会拒绝您的银行。我们分析您的DSR，优化债务结构，',
+        descriptionLine2: '匹配真正会批准您的银行 - 在您申请之前。',
         bottomDescription: 'INFINITE GZ：专业DSR优化、债务整合，以及AI智能匹配50+马来西亚银行。零前期费用。仅成功收费。',
       },
       products: {
@@ -4930,7 +4942,7 @@ export const translations: Record<Language, Translations> = {
         title: '资源中心',
         description: '大多数贷款agent使用过时的产品列表。我们使用50+马来西亚银行的实时数据、分析8家银行DSR标准的AI算法，以及智能匹配系统，向您展示哪些银行会真正批准——而非拒绝。真实结果：84.2%批准率 vs 市场平均40%。平均批准时间：21-25天 vs 市场45天。平均释放额外贷款额度：每位客户RM 150K。',
       },
-    
+
       stats: [
         { number: '50+', title: '金融机构', description: '来自Maybank、CIMB、Hong Leong、RHB、Public Bank、数字银行和金融科技公司的实时数据。我们知道哪家银行会批准哪种档案。真实案例：自雇月入RM 10K，RHB认60%（RM 6K），Hong Leong认90%（RM 9K）。我们推荐Hong Leong。结果：贷款额度差异10年相差RM 496K。' },
         { number: 'RM 5亿+', title: '促成贷款', description: '为500+客户获得的总融资额。平均批准时间：21-25天（市场45天）。平均释放额外贷款额度：每位客户RM 150K。真实案例：40年零售企业经过我们优化后获得RM 200万贷款，2年收入增长3倍。' },
@@ -4959,7 +4971,7 @@ export const translations: Record<Language, Translations> = {
         title: '新闻动态',
         description: '500+客户。RM 5亿+促成。84.2%批准率 vs 市场40%。平均批准时间：21-25天 vs 市场45天。平均释放额外贷款额度：每位客户RM 150K。阅读我们如何帮助企业克服DSR问题、整合债务并获得传统agent无法提供的融资。',
       },
-    
+
       items: [
         { title: '促成RM 5亿+融资：500+客户成功获得贷款', date: '2024-12', category: '里程碑' },
         { title: 'CreditPilot AI升级：98%匹配准确度，2分钟分析', date: '2024-12', category: '产品' },
@@ -5015,7 +5027,7 @@ export const translations: Record<Language, Translations> = {
           },
         ],
       },
-    
+
       jobs: {
         tag: '开放职位',
         title: '加入我们成长的团队',
@@ -6283,9 +6295,13 @@ export const translations: Record<Language, Translations> = {
     },
         home: {
       hero: {
-        title: 'Wang Dunia,\nMilik Anda.',
+        title: 'Wang Dunia, Milik Anda.',
+        titleLine1: 'Wang Dunia,',
+        titleLine2: 'Milik Anda.',
         subtitle: 'Penyelesaian Sehenti Anda',
         description: 'Untuk Pinjaman, Pengoptimuman Kewangan, Dan Perkhidmatan Nasihat Digital Untuk Perniagaan Anda.',
+        descriptionLine1: 'Untuk Pinjaman, Pengoptimuman Kewangan,',
+        descriptionLine2: 'Dan Perkhidmatan Nasihat Digital Untuk Perniagaan Anda.',
         bottomDescription: 'INFINITE GZ Menyediakan Analisis Kewangan Menyeluruh, Padanan Pinjaman Dari Semua Bank Dan Syarikat Fintech Malaysia, Serta 8 Perkhidmatan Pelengkap - Semua Tanpa Yuran Pendahuluan.',
       },
       products: {
@@ -7287,7 +7303,7 @@ export const translations: Record<Language, Translations> = {
         title: '50+ Bank. Data Masa Nyata. 98% Ketepatan Padanan. Beginilah Cara Kami Membuat Anda Diluluskan.',
         description: 'Kebanyakan ejen pinjaman menggunakan senarai produk yang ketinggalan zaman. Kami menggunakan data masa nyata dari 50+ bank Malaysia, algoritma AI yang menganalisis piawaian DSR 8 bank, dan padanan pintar yang menunjukkan bank mana yang akan benar-benar meluluskan - bukan menolak. Hasil sebenar: 84.2% kadar kelulusan vs purata pasaran 40%. Masa kelulusan purata: 21-25 hari vs pasaran 45 hari. Purata kapasiti pinjaman tambahan dibuka kunci: RM 150K setiap pelanggan.',
       },
-    
+
       stats: [
         { number: '50+', title: 'Institusi Kewangan', description: 'Data masa nyata dari Maybank, CIMB, Hong Leong, RHB, Public Bank, bank digital, dan syarikat fintech. Kami tahu bank mana yang meluluskan profil mana. Contoh sebenar: Bebas RM 10K/bulan, RHB hanya mengiktiraf 60% (RM 6K), tetapi Hong Leong mengiktiraf 90% (RM 9K). Kami mengesyorkan Hong Leong. Hasil: Perbezaan kapasiti pinjaman RM 496K lebih 10 tahun.' },
         { number: 'RM 500 Juta+', title: 'Pinjaman Difasilitasi', description: 'Jumlah pembiayaan yang dijamin untuk 500+ pelanggan. Masa kelulusan purata: 21-25 hari (vs pasaran 45 hari). Purata kapasiti pinjaman tambahan dibuka kunci: RM 150K setiap pelanggan. Kes sebenar: Perniagaan runcit 40 tahun mendapat pinjaman RM 2M selepas pengoptimuman kami, hasil meningkat 3 kali ganda dalam 2 tahun.' },
@@ -7316,7 +7332,7 @@ export const translations: Record<Language, Translations> = {
         title: 'Pelanggan Sebenar, Hasil Sebenar: Bagaimana Kami Membantu Perniagaan Diluluskan',
         description: '500+ pelanggan. RM 500M+ difasilitasi. 84.2% kadar kelulusan vs pasaran 40%. Masa kelulusan purata: 21-25 hari vs pasaran 45 hari. Purata kapasiti pinjaman tambahan dibuka kunci: RM 150K setiap pelanggan. Baca bagaimana kami membantu perniagaan mengatasi masalah DSR, menyatukan hutang, dan mendapatkan pembiayaan yang ejen tradisional tidak dapat berikan.',
       },
-    
+
       items: [
         { title: 'RM 500M+ Pembiayaan Difasilitasi: 500+ Pelanggan Berjaya Mendapatkan Pinjaman', date: '2024-12', category: 'Pencapaian' },
         { title: 'Kemas Kini AI CreditPilot: 98% Ketepatan Padanan, Analisis 2 Minit', date: '2024-12', category: 'Produk' },
@@ -7372,7 +7388,7 @@ export const translations: Record<Language, Translations> = {
           },
         ],
       },
-    
+
       jobs: {
         tag: 'Jawatan Kosong',
         title: 'Sertai Pasukan Kami Yang Berkembang',

@@ -39,12 +39,12 @@ export default function Hero() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
-    
+
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   return (
-    <section 
+    <section
       ref={heroRef}
       className="relative h-screen flex items-center justify-center snap-section overflow-hidden"
     >
@@ -64,7 +64,7 @@ export default function Hero() {
             <source src={videoUrl} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          
+
           {/* 视频遮罩层 - 半透明优化 */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40"></div>
         </div>
@@ -88,37 +88,51 @@ export default function Hero() {
                   </svg>
                 </div>
               </div>
-              
-              <Link 
-                href="https://portal.infinitegz.com" 
+
+              <Link
+                href="https://portal.infinitegz.com"
                 className="btn-xai mono-tag"
               >
                 {t.common.useCreditPilot}
               </Link>
             </div>
 
-            {/* 主标题 */}
+            {/* 主标题 - 两排显示 */}
             <div className="text-center space-y-6 animate-fadeIn delay-100">
-              <h1 className="text-primary mx-auto max-w-4xl text-balance text-5xl leading-tight tracking-tight md:text-6xl md:leading-tight lg:text-7xl lg:leading-tight xl:text-8xl xl:leading-tight">
-                {t.home.hero.title}
+              <h1 className="text-primary mx-auto max-w-4xl text-5xl leading-tight tracking-tight md:text-6xl md:leading-tight lg:text-7xl lg:leading-tight xl:text-8xl xl:leading-tight">
+                {t.home.hero.titleLine1 && t.home.hero.titleLine2 ? (
+                  <>
+                    <span className="block">{t.home.hero.titleLine1}</span>
+                    <span className="block">{t.home.hero.titleLine2}</span>
+                  </>
+                ) : (
+                  t.home.hero.title
+                )}
               </h1>
-              
-              {/* 简短的副标题 */}
+
+              {/* 简短的副标题 - 两排显示 */}
               <p className="text-secondary text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-light">
-                {t.home.hero.description}
+                {t.home.hero.descriptionLine1 && t.home.hero.descriptionLine2 ? (
+                  <>
+                    <span className="block">{t.home.hero.descriptionLine1}</span>
+                    <span className="block">{t.home.hero.descriptionLine2}</span>
+                  </>
+                ) : (
+                  t.home.hero.description
+                )}
               </p>
             </div>
 
             {/* CTA 按钮 - 更突出 */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fadeIn delay-200">
-              <Link 
-                href="https://portal.infinitegz.com" 
+              <Link
+                href="https://portal.infinitegz.com"
                 className="btn-xai btn-xai-primary whitespace-nowrap min-w-[180px] text-base py-3"
               >
                 {t.common.getStarted}
               </Link>
-              <Link 
-                href="#products" 
+              <Link
+                href="#products"
                 className="btn-xai whitespace-nowrap min-w-[180px] text-base py-3"
               >
                 {t.common.learnMore}
@@ -132,8 +146,8 @@ export default function Hero() {
                   key={index}
                   onClick={() => setCurrentSlide(index)}
                   className={`h-0.5 rounded-full transition-all duration-200 ${
-                    currentSlide === index 
-                      ? 'bg-primary w-8' 
+                    currentSlide === index
+                      ? 'bg-primary w-8'
                       : 'bg-primary/25 w-2'
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
@@ -143,7 +157,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      
+
       {/* 视频控制按钮（可选） */}
       {hasVideo && videoUrl && (
         <button
@@ -164,7 +178,7 @@ export default function Hero() {
           </svg>
         </button>
       )}
-      
+
       {/* 底部激光分隔线 */}
       <div className="absolute bottom-0 left-0 right-0 z-20">
         <div className="laser-divider"></div>
