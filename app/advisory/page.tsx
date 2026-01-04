@@ -16,8 +16,8 @@ export default function AdvisoryPage() {
         <Header />
         
         {/* Hero Section */}
-        <section className="relative pb-px">
-          <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl flex h-full flex-col justify-center">
+        <section className="relative pb-px min-h-screen">
+          <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl flex min-h-screen flex-col justify-center">
             <div className="relative z-20 text-center space-y-8">
               <div className="mono-tag text-secondary text-sm">
                 [ {t.advisory.hero.tag} ]
