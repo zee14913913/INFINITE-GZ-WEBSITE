@@ -9,7 +9,7 @@ import CTASection from '@/components/CTASection'
 
 export default function SolutionsPage() {
   const { t } = useLanguage()
-  
+
   return (
     <PageLayout>
       {/* Hero Section */}
@@ -36,9 +36,9 @@ export default function SolutionsPage() {
       <SectionContainer className="py-16 sm:py-24 relative" containerClassName="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl">
         <div className="grid lg:grid-cols-3 gap-px bg-border">
           {t.solutions.products.map((product, index) => (
-            <Link 
+            <Link
               key={index}
-              href={index === 0 ? '/creditpilot' : index === 1 ? '/advisory' : '/resources'} 
+              href={index === 0 ? '/creditpilot' : index === 1 ? '/advisory' : '/resources'}
               className={`group bg-background p-8 sm:p-12 hover:bg-secondary/5 transition-colors ${index > 0 ? 'border-t lg:border-t-0 lg:border-l border-border' : ''}`}
             >
               <div className="space-y-6">
@@ -103,8 +103,8 @@ export default function SolutionsPage() {
                 {t.solutions.complementaryServices.description}
               </p>
             </div>
-            <Link 
-              href="/advisory" 
+            <Link
+              href="/advisory"
               className="relative isolate inline-flex shrink-0 items-center justify-center border font-mono text-base/6 uppercase tracking-widest gap-x-3 px-6 py-3 sm:text-sm border-[--btn-border] bg-[--btn-bg] text-[--btn-text] hover:bg-[--btn-hover] rounded-full [--btn-bg:transparent] [--btn-border:theme(colors.primary/25%)] [--btn-hover:theme(colors.secondary/20%)] [--btn-text:theme(colors.primary)]"
             >
               <span>{t.common.viewDetails}</span>
@@ -117,10 +117,10 @@ export default function SolutionsPage() {
             // 第1项（财务优化）和第8项（信用卡管理）使用链接
             const isFinancialOptimization = service.num === '01';
             const isCreditCard = service.num === '08';
-            
+
             if (isFinancialOptimization) {
               return (
-                <Link 
+                <Link
                   key={index}
                   href="/financial-optimization"
                   className="bg-background p-6 sm:p-8 space-y-4 hover:bg-secondary/5 transition-colors group cursor-pointer"
@@ -137,10 +137,10 @@ export default function SolutionsPage() {
                 </Link>
               );
             }
-            
+
             if (isCreditCard) {
               return (
-                <Link 
+                <Link
                   key={index}
                   href="/credit-card-management"
                   className="bg-background p-6 sm:p-8 space-y-4 hover:bg-secondary/5 transition-colors group cursor-pointer"
@@ -157,7 +157,7 @@ export default function SolutionsPage() {
                 </Link>
               );
             }
-            
+
             // 其他7项保持原样
             return (
               <div key={index} className="bg-background p-6 sm:p-8 space-y-4 hover:bg-secondary/5 transition-colors">
