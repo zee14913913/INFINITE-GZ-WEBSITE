@@ -26,7 +26,7 @@ export default function NewsSection() {
           <h2 className="text-3xl tracking-tight md:text-4xl lg:text-5xl text-primary max-w-2xl">
             {t.home.news.title}
           </h2>
-          <p className="text-secondary text-base md:text-lg max-w-2xl">
+          <p className="text-secondary text-base md:text-lg whitespace-nowrap overflow-x-auto">
             {t.home.news.description}
           </p>
         </div>
