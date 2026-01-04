@@ -20,8 +20,8 @@ export default function SectionContainer({
     <section className={className}>
       <div className={containerClassName}>
         {children}
-        {showDivider && <LaserDivider className={dividerClassName} />}
       </div>
+      {showDivider && <LaserDivider className={dividerClassName} />}
     </section>
   )
 }

@@ -22,7 +22,7 @@ export default function CTASection({
   description,
   primaryButton,
   secondaryButton,
-  className = 'py-16 sm:py-32',
+  className = 'py-16 sm:py-32 relative',
   containerClassName = 'mx-auto w-full px-4 lg:px-6 xl:max-w-7xl',
 }: CTASectionProps) {
   return (
@@ -56,8 +56,8 @@ export default function CTASection({
             </div>
           )}
         </div>
-        <LaserDivider />
       </div>
+      <LaserDivider />
     </section>
   )
 }

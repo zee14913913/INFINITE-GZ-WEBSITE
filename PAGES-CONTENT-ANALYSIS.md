@@ -9,13 +9,13 @@
 1. **服务描述重复**
    - CreditPilot的capabilities是否与Solutions的coreBusiness重复？
    - Advisory的services是否与Solutions的complementaryServices重复？
-   
+
 2. **功能描述重复**
    - 是否有相同的功能在多个页面描述？
-   
+
 3. **价值主张重复**
    - 三个页面的价值主张是否有重叠？
-   
+
 4. **CTA内容重复**
    - 三个页面的CTA是否表达相同的意思？
 
