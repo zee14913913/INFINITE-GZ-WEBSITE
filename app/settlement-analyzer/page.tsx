@@ -46,26 +46,26 @@ interface ScenarioResult {
 
 export default function SettlementAnalyzerPage() {
   const { t } = useLanguage()
-  
+
   // Debts
   const [debts, setDebts] = useState<DebtRow[]>([
     { id: '1', type: 'creditCard', creditor: '', balance: 0, paymentStatus: 'default', monthsDefault: 0, monthlyPayment: 0 }
   ])
-  
+
   // Scenarios
   const [scenarios, setScenarios] = useState<SettlementScenario[]>([
     { id: '1', name: '70% Settlement', amount: 0, method: 'lumpsum', arrangement: 'partial', installmentMonths: 0 }
   ])
-  
+
   // Financial snapshot
   const [income, setIncome] = useState<number>(8000)
   const [otherDebt, setOtherDebt] = useState<number>(0)
   const [ctosScore, setCtosScore] = useState<number>(600)
-  
+
   // Timeline
   const [settleDate, setSettleDate] = useState<string>('')
   const [assessmentDate, setAssessmentDate] = useState<string>('12')
-  
+
   // Results
   const [results, setResults] = useState<ScenarioResult[] | null>(null)
   const [showResults, setShowResults] = useState(false)
@@ -122,7 +122,7 @@ export default function SettlementAnalyzerPage() {
   // Calculate CTOS recovery
   const calculateCTOSRecovery = (currentScore: number, arrangement: string, monthsElapsed: number): number => {
     let recovery = currentScore
-    
+
     // Initial impact based on arrangement type
     if (arrangement === 'full') {
       // Full settlement: +15-25 points over 6-12 months
@@ -135,7 +135,7 @@ export default function SettlementAnalyzerPage() {
       recovery = Math.max(currentScore - 20, 400)
       recovery += Math.min(monthsElapsed * 1.5, 30)
     }
-    
+
     // Cap at reasonable maximum
     return Math.min(recovery, 850)
   }
@@ -143,66 +143,66 @@ export default function SettlementAnalyzerPage() {
   // Calculate approval odds
   const calculateApprovalOdds = (dsr: number, ctosScore: number, monthsAfterSettlement: number): number => {
     let odds = 30 // Baseline for someone with settlement history
-    
+
     // DSR factor (max 35 points)
     const dsrRatio = dsr / 100
     if (dsrRatio < 0.50) odds += 35
     else if (dsrRatio < 0.60) odds += 25
     else if (dsrRatio < 0.70) odds += 15
     else odds += 5
-    
+
     // CTOS factor (max 30 points)
     if (ctosScore >= 750) odds += 30
     else if (ctosScore >= 700) odds += 25
     else if (ctosScore >= 650) odds += 18
     else if (ctosScore >= 600) odds += 12
     else odds += 5
-    
+
     // Time factor (max 35 points) - more time = better
     if (monthsAfterSettlement >= 24) odds += 35
     else if (monthsAfterSettlement >= 12) odds += 25
     else if (monthsAfterSettlement >= 6) odds += 15
     else odds += 5
-    
+
     return Math.min(odds, 100)
   }
 
   // Calculate scenario result
   const calculateScenarioResult = (scenario: SettlementScenario, totalDebtBalance: number): ScenarioResult => {
     const currentDSR = calculateCurrentDSR()
-    
+
     // Calculate settlement amount (default to scenario amount or 100% if not set)
     const settleAmount = scenario.amount > 0 ? scenario.amount : totalDebtBalance
-    
+
     // Calculate monthly payment for settlement
     let monthlyPayment = 0
     if (scenario.method === 'installment' && scenario.installmentMonths > 0) {
       monthlyPayment = settleAmount / scenario.installmentMonths
     }
-    
+
     // Calculate DSR after settlement
     // If lumpsum: immediate DSR drop
     // If installment: gradual DSR improvement
     const currentMonthlyDebt = debts.reduce((sum, d) => sum + d.monthlyPayment, 0) + otherDebt
-    const afterMonthlyDebt = scenario.method === 'lumpsum' 
-      ? otherDebt 
+    const afterMonthlyDebt = scenario.method === 'lumpsum'
+      ? otherDebt
       : otherDebt + monthlyPayment
-    
+
     const afterDSR = income > 0 ? (afterMonthlyDebt / income) * 100 : 0
     const dsrImprovement = currentDSR - afterDSR
     const monthlySavings = currentMonthlyDebt - afterMonthlyDebt
-    
+
     // CTOS recovery trajectory
     const currentCTOS = ctosScore
     const ctos6mo = calculateCTOSRecovery(currentCTOS, scenario.arrangement, 6)
     const ctos12mo = calculateCTOSRecovery(currentCTOS, scenario.arrangement, 12)
     const ctos24mo = calculateCTOSRecovery(currentCTOS, scenario.arrangement, 24)
-    
+
     // Approval odds at different time points
     const approvalOdds6mo = calculateApprovalOdds(afterDSR, ctos6mo, 6)
     const approvalOdds12mo = calculateApprovalOdds(afterDSR, ctos12mo, 12)
     const approvalOdds24mo = calculateApprovalOdds(afterDSR, ctos24mo, 24)
-    
+
     // Total cost comparison
     // Estimate current cost: minimum payments forever (simplified)
     const currentMonthlyMin = debts.reduce((sum, d) => sum + d.monthlyPayment, 0)
@@ -210,7 +210,7 @@ export default function SettlementAnalyzerPage() {
     const currentTotalCost = currentMonthlyMin * 12 * estimatedYearsToPay
     const settlementTotalCost = settleAmount
     const savings = currentTotalCost - settlementTotalCost
-    
+
     return {
       scenario,
       currentDSR,
@@ -244,32 +244,32 @@ export default function SettlementAnalyzerPage() {
 
   const handleAnalyze = (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (debts.length === 0 || debts.every(d => d.balance === 0)) {
       alert('Please enter at least one debt')
       return
     }
-    
+
     if (income <= 0) {
       alert('Please enter a valid income')
       return
     }
-    
+
     const totalDebtBalance = debts.reduce((sum, d) => sum + d.balance, 0)
-    
+
     // Auto-set scenario amounts if not set
     const processedScenarios = scenarios.map(s => ({
       ...s,
       amount: s.amount > 0 ? s.amount : totalDebtBalance * (s.name.includes('70%') ? 0.7 : s.name.includes('Full') ? 1.0 : 0.8)
     }))
-    
-    const scenarioResults = processedScenarios.map(scenario => 
+
+    const scenarioResults = processedScenarios.map(scenario =>
       calculateScenarioResult(scenario, totalDebtBalance)
     )
-    
+
     setResults(scenarioResults)
     setShowResults(true)
-    
+
     setTimeout(() => {
       const resultsElement = document.getElementById('results-section')
       if (resultsElement) {
@@ -292,12 +292,12 @@ export default function SettlementAnalyzerPage() {
 
   const getBestScenario = (): string => {
     if (!results || results.length === 0) return ''
-    
+
     // Find scenario with best approval odds at 12 months
-    const best = results.reduce((max, r) => 
+    const best = results.reduce((max, r) =>
       r.approvalOdds12mo > max.approvalOdds12mo ? r : max
     )
-    
+
     return best.scenario.name
   }
 
@@ -307,13 +307,13 @@ export default function SettlementAnalyzerPage() {
     <div className="min-h-screen bg-black text-foreground">
       <ScrollProgress />
       <Header />
-      
+
       <main className="pt-20 pb-32">
         <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl">
           {/* Back Button */}
           <div className="mb-8">
-            <Link 
-              href="/tools" 
+            <Link
+              href="/advisory"
               className="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors font-mono text-sm uppercase tracking-widest"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -329,7 +329,7 @@ export default function SettlementAnalyzerPage() {
             <p className="text-secondary mx-auto max-w-3xl text-lg md:text-xl leading-relaxed mb-6">
               {t.settlementAnalyzer.header.subtitle}
             </p>
-            
+
             {/* Notice Box */}
             <div className="max-w-4xl mx-auto p-6 bg-yellow-900/20 border border-yellow-800/50 rounded-xl">
               <p className="text-yellow-200 text-sm leading-relaxed">
@@ -356,7 +356,7 @@ export default function SettlementAnalyzerPage() {
                     {t.settlementAnalyzer.btn.addDebt}
                   </button>
                 </div>
-                
+
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
@@ -467,7 +467,7 @@ export default function SettlementAnalyzerPage() {
                     {t.settlementAnalyzer.btn.addScenario}
                   </button>
                 </div>
-                
+
                 <div className="space-y-6">
                   {scenarios.map(scenario => (
                     <div key={scenario.id} className="bg-black border border-zinc-800 rounded-xl p-6">
@@ -483,7 +483,7 @@ export default function SettlementAnalyzerPage() {
                           </button>
                         )}
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -496,7 +496,7 @@ export default function SettlementAnalyzerPage() {
                             className="w-full px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-lg text-primary focus:outline-none focus:border-primary"
                           />
                         </div>
-                        
+
                         <div>
                           <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                             {t.settlementAnalyzer.scenario.amount_label}
@@ -512,7 +512,7 @@ export default function SettlementAnalyzerPage() {
                             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary font-mono">RM</span>
                           </div>
                         </div>
-                        
+
                         <div>
                           <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                             {t.settlementAnalyzer.scenario.method_label}
@@ -526,7 +526,7 @@ export default function SettlementAnalyzerPage() {
                             <option value="installment">{t.settlementAnalyzer.scenario.method_installment}</option>
                           </select>
                         </div>
-                        
+
                         {scenario.method === 'installment' && (
                           <div>
                             <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -542,7 +542,7 @@ export default function SettlementAnalyzerPage() {
                             />
                           </div>
                         )}
-                        
+
                         <div>
                           <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                             {t.settlementAnalyzer.scenario.arrangement_label}
@@ -734,7 +734,7 @@ export default function SettlementAnalyzerPage() {
                   {results.map((result, idx) => (
                     <div key={result.scenario.id} className="bg-black border border-zinc-800 rounded-xl p-6">
                       <h3 className="text-xl font-semibold text-primary mb-6">{t.settlementAnalyzer.result.scenario_title} {idx + 1}: {result.scenario.name}</h3>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         {/* Settlement Details */}
                         <div>
@@ -749,15 +749,15 @@ export default function SettlementAnalyzerPage() {
                             <div className="flex justify-between">
                               <span className="text-secondary">Payment Method:</span>
                               <span className="text-primary">
-                                {result.scenario.method === 'lumpsum' 
-                                  ? t.settlementAnalyzer.scenario.method_lumpsum 
+                                {result.scenario.method === 'lumpsum'
+                                  ? t.settlementAnalyzer.scenario.method_lumpsum
                                   : `${t.settlementAnalyzer.scenario.method_installment} (${result.scenario.installmentMonths} months)`}
                               </span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-secondary">Arrangement:</span>
                               <span className="text-primary">
-                                {result.scenario.arrangement === 'full' 
+                                {result.scenario.arrangement === 'full'
                                   ? t.settlementAnalyzer.scenario.arrangement_full
                                   : result.scenario.arrangement === 'partial'
                                   ? t.settlementAnalyzer.scenario.arrangement_partial
@@ -904,7 +904,7 @@ export default function SettlementAnalyzerPage() {
                     <ArrowRight className="w-4 h-4" />
                   </a>
                   <Link
-                    href="/tools"
+                    href="/advisory"
                     className="flex-1 px-6 py-3 bg-transparent border border-zinc-800 rounded-full text-secondary font-mono text-sm uppercase tracking-widest hover:bg-zinc-900/50 hover:border-zinc-700 transition-all flex items-center justify-center gap-2"
                   >
                     {t.settlementAnalyzer.btn.again}

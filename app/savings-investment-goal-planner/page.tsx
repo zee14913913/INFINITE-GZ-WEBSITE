@@ -58,7 +58,7 @@ const GOAL_TYPES = ['emergency', 'homeDownPayment', 'vehicle', 'education', 'ret
 
 export default function SavingsInvestmentGoalPlannerPage() {
   const { t } = useLanguage()
-  
+
   // State
   const [goals, setGoals] = useState<Goal[]>([])
   const [monthlySavings, setMonthlySavings] = useState<number>(1000)
@@ -66,7 +66,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
   const [investmentStrategy, setInvestmentStrategy] = useState<string>('balanced')
   const [inflation, setInflation] = useState<number>(3)
   const [monthlyExpenses, setMonthlyExpenses] = useState<number>(5000)
-  
+
   // Results
   const [results, setResults] = useState<PlanResult | null>(null)
   const [showResults, setShowResults] = useState(false)
@@ -86,16 +86,16 @@ export default function SavingsInvestmentGoalPlannerPage() {
   // Calculate months to goal
   const calculateMonthsToGoal = (targetAmount: number, monthlySavings: number, annualReturn: number): number => {
     if (monthlySavings <= 0) return Infinity
-    
+
     const monthlyReturn = Math.pow(1 + annualReturn / 100, 1/12) - 1
-    
+
     if (monthlyReturn === 0) {
       return Math.ceil(targetAmount / monthlySavings)
     }
-    
+
     const ratio = (targetAmount * monthlyReturn / monthlySavings) + 1
     if (ratio <= 0) return Infinity
-    
+
     const months = Math.log(ratio) / Math.log(1 + monthlyReturn)
     return Math.ceil(months)
   }
@@ -108,7 +108,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
       const yearsToGoal = monthsToGoal / 12
       const inflationAdjustedAmount = goal.targetAmount * Math.pow(1 + inflation / 100, yearsToGoal)
       const remainingNeeded = inflationAdjustedAmount - goal.alreadySaved
-      
+
       return {
         ...goal,
         inflationAdjustedAmount: Math.round(inflationAdjustedAmount),
@@ -116,35 +116,35 @@ export default function SavingsInvestmentGoalPlannerPage() {
         timelineMonths: monthsToGoal
       }
     })
-    
+
     // 2. CALCULATE MONTHLY SAVINGS NEEDED PER GOAL
     let processedGoals2: Array<Goal & { inflationAdjustedAmount: number; remainingNeeded: number; timelineMonths: number; monthlyNeededNoReturn: number }> = processedGoals.map(goal => {
       const monthsToGoal = goal.timelineMonths
       const monthlyNeeded = goal.remainingNeeded / monthsToGoal
       return { ...goal, monthlyNeededNoReturn: monthlyNeeded }
     })
-    
+
     // 3. CALCULATE MONTHLY SAVINGS NEEDED WITH INVESTMENT RETURNS
     const annualReturn = getReturnByStrategy(investmentStrategy)
-    
+
     let processedGoals3: Array<Goal & { inflationAdjustedAmount: number; remainingNeeded: number; timelineMonths: number; monthlyNeededNoReturn: number; monthlyNeededWithReturn: number }> = processedGoals2.map(goal => {
       const monthsToGoal = goal.timelineMonths
       const monthlyReturn = Math.pow(1 + annualReturn / 100, 1/12) - 1
-      
+
       if (monthlyReturn === 0) {
         return { ...goal, monthlyNeededWithReturn: goal.monthlyNeededNoReturn }
       }
-      
+
       const numerator = goal.remainingNeeded
       const denominator = (Math.pow(1 + monthlyReturn, monthsToGoal) - 1) / monthlyReturn
       const monthlyNeededWithReturn = numerator / denominator
-      
+
       return { ...goal, monthlyNeededWithReturn: monthlyNeededWithReturn }
     })
-    
+
     // 4. CALCULATE ALLOCATION
     let allocation: Record<string, number> = {}
-    
+
     if (allocationStrategy === 'equal') {
       const perGoal = monthlySavings / goals.length
       goals.forEach(goal => {
@@ -154,29 +154,29 @@ export default function SavingsInvestmentGoalPlannerPage() {
       const highGoals = goals.filter(g => g.priority === 'high')
       const mediumGoals = goals.filter(g => g.priority === 'medium')
       const lowGoals = goals.filter(g => g.priority === 'low')
-      
+
       const highAllocation = monthlySavings * 0.5 / (highGoals.length || 1)
       const mediumAllocation = monthlySavings * 0.3 / (mediumGoals.length || 1)
       const lowAllocation = monthlySavings * 0.2 / (lowGoals.length || 1)
-      
+
       goals.forEach(goal => {
         if (goal.priority === 'high') allocation[goal.id] = highAllocation
         else if (goal.priority === 'medium') allocation[goal.id] = mediumAllocation
         else allocation[goal.id] = lowAllocation
       })
     }
-    
+
     // 5. FEASIBILITY ASSESSMENT
     const totalNeeded = processedGoals3.reduce((sum, g) => sum + g.monthlyNeededWithReturn, 0)
     const feasibility = monthlySavings >= totalNeeded ? 'achievable' : 'challenging'
-    
+
     // 6. TIMELINE PROJECTION
     const goalResults: GoalResult[] = processedGoals3.map(goal => {
       const allocated = allocation[goal.id] || 0
       const projectedMonths = calculateMonthsToGoal(goal.remainingNeeded, allocated, annualReturn)
       const projectedDate = new Date()
       projectedDate.setMonth(projectedDate.getMonth() + projectedMonths)
-      
+
       return {
         ...goal,
         projectedMonths: projectedMonths,
@@ -185,7 +185,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
         allocation: allocated
       }
     })
-    
+
     return {
       goals: goalResults,
       allocation: allocation,
@@ -223,7 +223,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
       priority: 'medium',
       alreadySaved: 0
     }
-    
+
     // Set default values based on goal type
     if (type === 'emergency') {
       newGoal.targetAmount = monthlyExpenses * 3
@@ -258,7 +258,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
       newGoal.timelineValue = 12
       newGoal.timelineUnit = 'months'
     }
-    
+
     setGoals([...goals, newGoal])
   }
 
@@ -270,7 +270,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
     setGoals(goals.map(goal => {
       if (goal.id === id) {
         const updated = { ...goal, [field]: value }
-        
+
         // Auto-calculate target amount for specific goals
         if (field === 'propertyPrice' && goal.type === 'homeDownPayment') {
           updated.targetAmount = (value || 0) * 0.2
@@ -289,7 +289,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
         } else if (field === 'tripBudget' && goal.type === 'vacation') {
           updated.targetAmount = value || 0
         }
-        
+
         return updated
       }
       return goal
@@ -298,21 +298,21 @@ export default function SavingsInvestmentGoalPlannerPage() {
 
   const handleCalculate = (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (goals.length === 0) {
       alert('Please add at least one goal')
       return
     }
-    
+
     if (monthlySavings <= 0) {
       alert('Please enter a valid monthly savings amount')
       return
     }
-    
+
     const calculatedResults = calculateGoalRequirements()
     setResults(calculatedResults)
     setShowResults(true)
-    
+
     setTimeout(() => {
       const resultsElement = document.getElementById('results-section')
       if (resultsElement) {
@@ -336,7 +336,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
     const allocation = goal.allocation || 0
     const needed = goal.monthlyNeededWithReturn
     const ratio = allocation / needed
-    
+
     if (ratio >= 1) {
       return { text: t.savingsGoal.result.onTrack, color: 'text-green-400', bg: 'bg-green-400/20', icon: CheckCircle }
     } else if (ratio >= 0.8) {
@@ -356,13 +356,13 @@ export default function SavingsInvestmentGoalPlannerPage() {
     <div className="min-h-screen bg-black text-foreground">
       <ScrollProgress />
       <Header />
-      
+
       <main className="pt-20 pb-32">
         <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl">
           {/* Back Button */}
           <div className="mb-8">
-            <Link 
-              href="/tools" 
+            <Link
+              href="/advisory"
               className="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors font-mono text-sm uppercase tracking-widest"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -378,7 +378,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
             <p className="text-secondary mx-auto max-w-3xl text-lg md:text-xl leading-relaxed mb-6">
               {t.savingsGoal.header.subtitle}
             </p>
-            
+
             {/* Notice Box */}
             <div className="max-w-4xl mx-auto p-6 bg-yellow-900/20 border border-yellow-800/50 rounded-xl">
               <p className="text-yellow-200 text-sm leading-relaxed">
@@ -395,7 +395,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                 <h3 className="text-xl font-semibold text-primary mb-6 uppercase tracking-widest font-mono text-sm">
                   {t.savingsGoal.input.goalType_label}
                 </h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                   {GOAL_TYPES.map(type => (
                     <button
@@ -411,7 +411,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                     </button>
                   ))}
                 </div>
-                
+
                 {/* Monthly Expenses Input (for emergency fund calculation) */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -436,7 +436,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                   <h3 className="text-xl font-semibold text-primary mb-6 uppercase tracking-widest font-mono text-sm">
                     Goal Target Details
                   </h3>
-                  
+
                   <div className="space-y-6">
                     {goals.map(goal => (
                       <div key={goal.id} className="bg-black border border-zinc-800 rounded-xl p-6">
@@ -455,7 +455,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                             <Trash2 className="w-5 h-5" />
                           </button>
                         </div>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {/* Goal-specific inputs */}
                           {goal.type === 'homeDownPayment' && (
@@ -475,7 +475,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                               </div>
                             </div>
                           )}
-                          
+
                           {goal.type === 'vehicle' && (
                             <div>
                               <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -493,7 +493,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                               </div>
                             </div>
                           )}
-                          
+
                           {goal.type === 'education' && (
                             <>
                               <div>
@@ -537,7 +537,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                               </div>
                             </>
                           )}
-                          
+
                           {goal.type === 'retirement' && (
                             <>
                               <div>
@@ -583,7 +583,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                               </div>
                             </>
                           )}
-                          
+
                           {goal.type === 'vacation' && (
                             <div>
                               <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -601,7 +601,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                               </div>
                             </div>
                           )}
-                          
+
                           {goal.type === 'custom' && (
                             <div>
                               <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -615,7 +615,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                               />
                             </div>
                           )}
-                          
+
                           {/* Common fields */}
                           <div>
                             <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -632,7 +632,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary font-mono">RM</span>
                             </div>
                           </div>
-                          
+
                           <div>
                             <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                               {t.savingsGoal.input.timeline_label}
@@ -655,7 +655,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                               </select>
                             </div>
                           </div>
-                          
+
                           <div>
                             <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                               {t.savingsGoal.input.priority_label}
@@ -670,7 +670,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                               <option value="low">{t.savingsGoal.priority.low}</option>
                             </select>
                           </div>
-                          
+
                           <div>
                             <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                               {t.savingsGoal.input.goalStatus_label}
@@ -698,7 +698,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                 <h3 className="text-xl font-semibold text-primary mb-6 uppercase tracking-widest font-mono text-sm">
                   Savings & Investment Strategy
                 </h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -717,7 +717,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                     </div>
                     <p className="text-xs text-secondary mt-1">Amount left after expenses, debts, and essentials</p>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.savingsGoal.input.allocation_label}
@@ -731,7 +731,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                       <option value="priority">{t.savingsGoal.allocation.priority}</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.savingsGoal.input.investmentStrategy_label}
@@ -748,7 +748,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                       <option value="aggressive">{t.savingsGoal.investmentStrategy.aggressive}</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.savingsGoal.input.inflation_label}
@@ -817,7 +817,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                     const statusBadge = getStatusBadge(goal)
                     const StatusIcon = statusBadge.icon
                     const timelineMonths = goal.timelineUnit === 'years' ? goal.timelineValue * 12 : goal.timelineValue
-                    
+
                     return (
                       <div key={goal.id} className="bg-black border border-zinc-800 rounded-xl p-6">
                         <div className="flex justify-between items-start mb-4">
@@ -827,7 +827,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                             {statusBadge.text}
                           </span>
                         </div>
-                        
+
                         <div className="space-y-3 text-sm">
                           <div className="flex justify-between">
                             <span className="text-secondary">Target Amount:</span>
@@ -948,7 +948,7 @@ export default function SavingsInvestmentGoalPlannerPage() {
                     <Download className="w-4 h-4" />
                   </button>
                   <Link
-                    href="/tools"
+                    href="/advisory"
                     className="px-6 py-3 bg-transparent border border-zinc-800 rounded-full text-secondary font-mono text-sm uppercase tracking-widest hover:bg-zinc-900/50 hover:border-zinc-700 transition-all flex items-center justify-center gap-2"
                   >
                     {t.savingsGoal.btn.tools}

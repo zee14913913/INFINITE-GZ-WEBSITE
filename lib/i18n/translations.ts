@@ -162,7 +162,7 @@ export interface Translations {
     };
   };
 
-  // Advisory Page
+  // Advisory Page (Calculators Hub)
   advisory: {
     meta: {
       title: string;
@@ -173,23 +173,60 @@ export interface Translations {
       title: string;
       description: string;
     };
-    services: {
+    calculators: {
       tag: string;
       title: string;
-      items: Array<{
-        num: string;
-        title: string;
-        description: string;
-      }>;
-    };
-    benefits: {
-      tag: string;
-      title: string;
-      items: Array<{
-        icon: string;
-        title: string;
-        description: string;
-      }>;
+      description: string;
+      items: {
+        loanCalculator: {
+          title: string;
+          description: string;
+        };
+        loanOptimizer: {
+          title: string;
+          description: string;
+        };
+        loanAnalyzer: {
+          title: string;
+          description: string;
+        };
+        loanMatcher: {
+          title: string;
+          description: string;
+        };
+        cardSimulator: {
+          title: string;
+          description: string;
+        };
+        financialOptimization: {
+          title: string;
+          description: string;
+        };
+        propertyRenovation: {
+          title: string;
+          description: string;
+        };
+        settlementAnalyzer: {
+          title: string;
+          description: string;
+        };
+        expenseTracker: {
+          title: string;
+          description: string;
+        };
+        insurancePlanner: {
+          title: string;
+          description: string;
+        };
+        savingsPlanner: {
+          title: string;
+          description: string;
+        };
+        cashFlowOptimization: {
+          title: string;
+          description: string;
+        };
+      };
     };
     cta: {
       title: string;
@@ -1797,51 +1834,60 @@ export const translations: Record<Language, Translations> = {
         title: '8 Free Services For Loan Clients',
         description: 'DSR optimization, debt consolidation, business planning, e-commerce, accounting, tax optimization - all FREE with your loan.',
       },
-      services: {
-        tag: '8 Core Services',
-        title: 'What You Get: Complete Business Support (All Free)',
-        items: [
-          {
-            num: '01',
+      calculators: {
+        tag: 'All Calculators',
+        title: 'Choose Your Financial Tool',
+        description: 'Each calculator provides clear analysis and recommendations to help you make informed financial decisions.',
+        items: {
+          loanCalculator: {
+            title: 'Loan Affordability Calculator',
+            description: 'Calculate your borrowing capacity and Debt Service Ratio (DSR) based on income and existing commitments.',
+          },
+          loanOptimizer: {
+            title: 'Loan Optimizer',
+            description: 'Upload your CTOS report and get detailed before/after analysis showing how consolidation can reduce monthly payments.',
+          },
+          loanAnalyzer: {
+            title: 'Loan Analyzer',
+            description: 'Comprehensive loan analysis with multi-step assessment, DSR calculation, and bank recommendations.',
+          },
+          loanMatcher: {
+            title: 'Loan Matcher',
+            description: 'Match your financial profile with the best loan products from 50+ Malaysian banks and fintech companies.',
+          },
+          cardSimulator: {
+            title: 'Credit Card Payoff Simulator',
+            description: 'Compare three payoff strategies: minimum payments, aggressive repayment, or consolidation loan.',
+          },
+          financialOptimization: {
             title: 'Financial Optimization',
-            description: 'DSR optimization (improve approval rate 60-80%), debt consolidation (save RM 500-2,000/month), credit score repair (650 → 780 in 6 months), cash flow management. Real value: RM 10K-50K saved in interest over 3 years.',
+            description: 'DSR calculator with comprehensive bank standards, income recognition, and optimization recommendations.',
           },
-          {
-            num: '02',
-            title: 'Marketing & Advertising',
-            description: 'Channel design, marketing strategy, market planning, supplier advertising solutions. Help traditional businesses go digital and reach new customers. Real case: 40-year retail business tripled revenue through digital marketing.',
+          propertyRenovation: {
+            title: 'Property Renovation Planner',
+            description: 'Plan property purchase and renovation costs. Compare basic, standard, and premium scenarios.',
           },
-          {
-            num: '03',
-            title: 'Business Planning',
-            description: 'Professional business plans for bank loans (RM 1,500-3,500 value), financing design, business model development, market analysis. Average approval time: 21-25 days (vs market 45 days). 98% approval rate for our BP clients.',
+          settlementAnalyzer: {
+            title: 'Settlement Analyzer',
+            description: 'Calculate settlement amounts for your loans. Analyze which loans to settle or consolidate.',
           },
-          {
-            num: '04',
-            title: 'Insurance Services',
-            description: 'Product recommendations, insurance planning, coverage analysis. Ensure your business and personal assets are properly protected while optimizing costs.',
+          expenseTracker: {
+            title: 'Expense Tracker',
+            description: 'Track and analyze your monthly expenses. Identify areas for optimization and savings.',
           },
-          {
-            num: '05',
-            title: 'E-Commerce Solutions ⭐',
-            description: 'Quick online store setup (Shopee, Lazada, own website), promotion strategies, operations support, channel building. Real case: Traditional manufacturer increased revenue 3x through e-commerce. Complete setup in 2-4 weeks.',
+          insurancePlanner: {
+            title: 'Insurance Coverage Planner',
+            description: 'Plan your insurance coverage needs. Analyze protection gaps and optimize coverage costs.',
           },
-          {
-            num: '06',
-            title: 'Membership System',
-            description: 'System design, points & rewards programs, benefits planning. Build customer loyalty and increase repeat purchases. Real value: 20-30% increase in customer retention.',
+          savingsPlanner: {
+            title: 'Savings & Investment Planner',
+            description: 'Plan your savings and investment goals. Calculate required monthly contributions and timelines.',
           },
-          {
-            num: '07',
-            title: 'Accounting & Tax Optimization',
-            description: 'Bookkeeping, tax filing with LHDN, financial statements, audit support, 15% tax optimization. Save RM 3,000-15,000/year legally. Real case: RM 100K revenue → RM 15K tax savings through proper planning.',
+          cashFlowOptimization: {
+            title: 'Cash Flow Optimization',
+            description: 'Analyze and optimize your business or personal cash flow. Identify improvement opportunities.',
           },
-          {
-            num: '08',
-            title: 'Credit Card Management',
-            description: 'Payment reminders, payment-on-behalf, purchase-on-behalf services. Save RM 1,200-5,000/year by avoiding late fees and maximizing rewards. 50/50 revenue share model or RM 99/month subscription.',
-          },
-        ],
+        },
       },
       benefits: {
         tag: 'Why This Is Different',
@@ -1865,8 +1911,8 @@ export const translations: Record<Language, Translations> = {
         ],
       },
       cta: {
-        title: 'Ready to Get Your Loan + Free Business Support?',
-        description: 'Book a free consultation. We\'ll assess your loan eligibility, show you which banks will approve you, and explain how all 8 services can help your business grow - all at zero upfront cost.',
+        title: 'Need Professional Financial Advice?',
+        description: 'Book a free consultation to discuss your financial situation and get personalized recommendations.',
       },
     },
     solutions: {

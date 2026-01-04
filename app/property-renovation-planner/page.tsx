@@ -39,24 +39,24 @@ interface StrategyResult {
 
 export default function PropertyRenovationPlannerPage() {
   const { t } = useLanguage()
-  
+
   // Property details
   const [propertyPrice, setPropertyPrice] = useState<number>(500000)
   const [downPayment, setDownPayment] = useState<number>(50000)
-  
+
   // Renovation
   const [renoBudget, setRenoBudget] = useState<number>(50000)
   const [renoFinType, setRenoFinType] = useState<string>('topup')
-  
+
   // Credit profile
   const [ctosScore, setCtosScore] = useState<number>(700)
   const [existingDebt, setExistingDebt] = useState<number>(0)
   const [income, setIncome] = useState<number>(10000)
-  
+
   // Loan terms
   const [homeLoanTenure, setHomeLoanTenure] = useState<number>(25)
   const [homeRate, setHomeRate] = useState<number>(3.5)
-  
+
   // Results
   const [results, setResults] = useState<{
     strategy1: StrategyResult
@@ -70,14 +70,14 @@ export default function PropertyRenovationPlannerPage() {
   // Calculate monthly payment using amortization
   const calculateMonthlyPayment = (principal: number, annualRate: number, tenureYears: number): number => {
     if (principal <= 0) return 0
-    
+
     const r = annualRate / 100 / 12
     const n = tenureYears * 12
-    
+
     if (r === 0) {
       return principal / n
     }
-    
+
     const numerator = r * Math.pow(1 + r, n)
     const denominator = Math.pow(1 + r, n) - 1
     return principal * (numerator / denominator)
@@ -91,32 +91,32 @@ export default function PropertyRenovationPlannerPage() {
   // Calculate approval odds
   const calculateApprovalOdds = (ltv: number, dsr: number, ctosScore: number, downPaymentPercent: number): number => {
     let odds = 50 // Baseline
-    
+
     // LTV factor (max 25 points)
     if (ltv < 0.70) odds += 25
     else if (ltv < 0.80) odds += 20
     else if (ltv < 0.90) odds += 12
     else odds += 0
-    
+
     // DSR factor (max 30 points)
     if (dsr < 0.50) odds += 30
     else if (dsr < 0.60) odds += 20
     else if (dsr < 0.70) odds += 10
     else odds += 0
-    
+
     // CTOS factor (max 25 points)
     if (ctosScore >= 750) odds += 25
     else if (ctosScore >= 700) odds += 20
     else if (ctosScore >= 650) odds += 12
     else odds += 0
-    
+
     // Down payment factor (max 20 points)
     if (downPaymentPercent >= 0.25) odds += 20
     else if (downPaymentPercent >= 0.20) odds += 18
     else if (downPaymentPercent >= 0.15) odds += 15
     else if (downPaymentPercent >= 0.10) odds += 12
     else odds += 0
-    
+
     return Math.min(odds, 100)
   }
 
@@ -125,11 +125,11 @@ export default function PropertyRenovationPlannerPage() {
     const homeLoanAmount = propertyPrice - downPayment
     const homeMonthly = calculateMonthlyPayment(homeLoanAmount, homeRate, homeLoanTenure)
     const homeInterest = calculateTotalInterest(homeMonthly, homeLoanTenure, homeLoanAmount)
-    
+
     // Renovation financing
     let renoRate = 3.5
     let renoTenure = 25
-    
+
     if (renoFinType === 'personal') {
       renoRate = 10
       renoTenure = 7
@@ -140,17 +140,17 @@ export default function PropertyRenovationPlannerPage() {
       renoRate = homeRate
       renoTenure = homeLoanTenure
     }
-    
+
     const renoMonthly = calculateMonthlyPayment(renoBudget, renoRate, renoTenure)
     const renoInterest = calculateTotalInterest(renoMonthly, renoTenure, renoBudget)
-    
+
     const totalMonthly = homeMonthly + renoMonthly + existingDebt
     const newDSR = (totalMonthly / income) * 100
     const totalLoan = homeLoanAmount + renoBudget
     const ltv = totalLoan / propertyPrice
     const downPaymentPercent = downPayment / propertyPrice
     const approvalOdds = calculateApprovalOdds(ltv, newDSR / 100, ctosScore, downPaymentPercent)
-    
+
     return {
       homeLoan: {
         amount: homeLoanAmount,
@@ -179,13 +179,13 @@ export default function PropertyRenovationPlannerPage() {
     const combinedAmount = (propertyPrice - downPayment) + renoBudget
     const combinedMonthly = calculateMonthlyPayment(combinedAmount, homeRate, homeLoanTenure)
     const combinedInterest = calculateTotalInterest(combinedMonthly, homeLoanTenure, combinedAmount)
-    
+
     const totalMonthly = combinedMonthly + existingDebt
     const newDSR = (totalMonthly / income) * 100
     const ltv = combinedAmount / propertyPrice
     const downPaymentPercent = downPayment / propertyPrice
     const approvalOdds = calculateApprovalOdds(ltv, newDSR / 100, ctosScore, downPaymentPercent)
-    
+
     return {
       homeLoan: {
         amount: propertyPrice - downPayment,
@@ -242,24 +242,24 @@ export default function PropertyRenovationPlannerPage() {
 
   const handleCalculate = (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (propertyPrice <= 0 || downPayment < 0 || income <= 0) {
       alert('Please enter valid values')
       return
     }
-    
+
     if (downPayment >= propertyPrice) {
       alert('Down payment cannot exceed property price')
       return
     }
-    
+
     const strategy1 = calculateStrategy1()
     const strategy2 = calculateStrategy2()
-    
+
     const totalToFinance = (propertyPrice - downPayment) + renoBudget
     const ltv = totalToFinance / propertyPrice
     const downPaymentPercent = downPayment / propertyPrice
-    
+
     setResults({
       strategy1,
       strategy2,
@@ -268,7 +268,7 @@ export default function PropertyRenovationPlannerPage() {
       totalToFinance
     })
     setShowResults(true)
-    
+
     setTimeout(() => {
       const resultsElement = document.getElementById('results-section')
       if (resultsElement) {
@@ -293,15 +293,15 @@ export default function PropertyRenovationPlannerPage() {
 
   const getRecommendation = (): string => {
     if (!results) return ''
-    
+
     const strategy1 = results.strategy1
     const strategy2 = results.strategy2
-    
+
     // Determine best strategy
     let bestStrategy = 1
     let reason = ''
     let savingsReason = ''
-    
+
     if (strategy1.totalInterest < strategy2.totalInterest) {
       bestStrategy = 1
       reason = 'Strategy 1 allows you to pay lower interest on the renovation portion'
@@ -316,15 +316,15 @@ export default function PropertyRenovationPlannerPage() {
       reason = 'Strategy 1 provides more flexibility with separate loans'
       savingsReason = 'both strategies have similar costs'
     }
-    
+
     const avgOdds = Math.round((strategy1.approvalOdds + strategy2.approvalOdds) / 2)
-    
+
     let recommendation = t.propertyRenovationPlanner.result.recommendation
     recommendation = recommendation.replace(/\{\{bestStrategy\}\}/g, bestStrategy.toString())
     recommendation = recommendation.replace(/\{\{reason\}\}/g, reason)
     recommendation = recommendation.replace(/\{\{odds\}\}/g, avgOdds.toString())
     recommendation = recommendation.replace(/\{\{savingsReason\}\}/g, savingsReason)
-    
+
     return recommendation
   }
 
@@ -334,13 +334,13 @@ export default function PropertyRenovationPlannerPage() {
     <div className="min-h-screen bg-black text-foreground">
       <ScrollProgress />
       <Header />
-      
+
       <main className="pt-20 pb-32">
         <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl">
           {/* Back Button */}
           <div className="mb-8">
-            <Link 
-              href="/tools" 
+            <Link
+              href="/advisory"
               className="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors font-mono text-sm uppercase tracking-widest"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -356,7 +356,7 @@ export default function PropertyRenovationPlannerPage() {
             <p className="text-secondary mx-auto max-w-3xl text-lg md:text-xl leading-relaxed mb-6">
               {t.propertyRenovationPlanner.header.subtitle}
             </p>
-            
+
             {/* Notice Box */}
             <div className="max-w-4xl mx-auto p-6 bg-blue-900/20 border border-blue-800/50 rounded-xl">
               <p className="text-blue-200 text-sm leading-relaxed">
@@ -644,7 +644,7 @@ export default function PropertyRenovationPlannerPage() {
                   {/* Strategy 1 */}
                   <div className="bg-black border border-zinc-800 rounded-xl p-6">
                     <h3 className="text-lg font-semibold text-primary mb-4">{t.propertyRenovationPlanner.result.strategy1_name}</h3>
-                    
+
                     <div className="space-y-4 mb-4">
                       <div>
                         <span className="text-xs text-secondary uppercase tracking-widest font-mono block mb-1">Home Loan</span>
@@ -656,7 +656,7 @@ export default function PropertyRenovationPlannerPage() {
                           <div>Total Interest: {formatCurrency(results.strategy1.homeLoan.totalInterest)}</div>
                         </div>
                       </div>
-                      
+
                       {results.strategy1.renoFinancing && (
                         <div>
                           <span className="text-xs text-secondary uppercase tracking-widest font-mono block mb-1">Renovation Financing</span>
@@ -671,7 +671,7 @@ export default function PropertyRenovationPlannerPage() {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="border-t border-zinc-800 pt-4 space-y-2">
                       <div className="flex justify-between">
                         <span className="text-xs text-secondary uppercase tracking-widest font-mono">Total Monthly</span>
@@ -696,7 +696,7 @@ export default function PropertyRenovationPlannerPage() {
                   {/* Strategy 2 */}
                   <div className="bg-black border border-zinc-800 rounded-xl p-6">
                     <h3 className="text-lg font-semibold text-primary mb-4">{t.propertyRenovationPlanner.result.strategy2_name}</h3>
-                    
+
                     {results.strategy2.combined && (
                       <div className="space-y-4 mb-4">
                         <div>
@@ -711,7 +711,7 @@ export default function PropertyRenovationPlannerPage() {
                         </div>
                       </div>
                     )}
-                    
+
                     <div className="border-t border-zinc-800 pt-4 space-y-2">
                       <div className="flex justify-between">
                         <span className="text-xs text-secondary uppercase tracking-widest font-mono">Total Monthly</span>
@@ -775,7 +775,7 @@ export default function PropertyRenovationPlannerPage() {
                     <ArrowRight className="w-4 h-4" />
                   </a>
                   <Link
-                    href="/tools"
+                    href="/advisory"
                     className="flex-1 px-6 py-3 bg-transparent border border-zinc-800 rounded-full text-secondary font-mono text-sm uppercase tracking-widest hover:bg-zinc-900/50 hover:border-zinc-700 transition-all flex items-center justify-center gap-2"
                   >
                     {t.propertyRenovationPlanner.btn.tools}

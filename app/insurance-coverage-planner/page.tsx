@@ -26,7 +26,7 @@ interface InsuranceResult {
 
 export default function InsuranceCoveragePlannerPage() {
   const { t } = useLanguage()
-  
+
   // Personal & Family Profile
   const [age, setAge] = useState<number>(30)
   const [gender, setGender] = useState<string>('male')
@@ -34,20 +34,20 @@ export default function InsuranceCoveragePlannerPage() {
   const [health, setHealth] = useState<string>('good')
   const [dependents, setDependents] = useState<number>(0)
   const [spouseIncome, setSpouseIncome] = useState<number>(0)
-  
+
   // Financial Profile
   const [income, setIncome] = useState<number>(8000)
   const [debts, setDebts] = useState<number>(0)
   const [assets, setAssets] = useState<number>(0)
   const [homeOwnership, setHomeOwnership] = useState<string>('renting')
   const [homeValue, setHomeValue] = useState<number>(0)
-  
+
   // Insurance Goals & Preferences
   const [goal, setGoal] = useState<string>('a')
   const [lifePreference, setLifePreference] = useState<string>('term')
   const [healthPreference, setHealthPreference] = useState<string>('basic')
   const [disabilityPreference, setDisabilityPreference] = useState<string>('optional')
-  
+
   // Results
   const [results, setResults] = useState<InsuranceResult | null>(null)
   const [showResults, setShowResults] = useState(false)
@@ -57,29 +57,29 @@ export default function InsuranceCoveragePlannerPage() {
     // 1. LIFE INSURANCE RECOMMENDATION
     const annualIncome = income * 12
     const lifeInsuranceNeed = (annualIncome * 10) + debts
-    
+
     // Adjust for dependents
     const dependentMultiplier = 1 + (dependents * 0.5)
     const adjustedLifeInsurance = lifeInsuranceNeed * dependentMultiplier
-    
+
     // 2. HEALTH INSURANCE RECOMMENDATION
     let healthInsuranceNeed = 100000
     if (healthPreference === 'comprehensive') healthInsuranceNeed = 200000
     else if (healthPreference === 'premium') healthInsuranceNeed = 300000
-    
+
     // Critical illness rider: 50-70% of life insurance
     const criticalIllnessNeed = adjustedLifeInsurance * 0.5
-    
+
     // 3. DISABILITY / INCOME PROTECTION
     const disabilityMonthlyBenefit = income * 0.65
     const disabilityInsuranceNeed = disabilityMonthlyBenefit * 36 // 3 years
-    
+
     // 4. PROPERTY INSURANCE
     let propertyInsuranceNeed = 0
     if (homeValue > 0) {
       propertyInsuranceNeed = homeValue + 50000 // Home + contents
     }
-    
+
     // 5. ANNUAL PREMIUM ESTIMATES
     // Life Insurance Premium (per 100k coverage)
     let lifeInsurancePremium = 0
@@ -91,53 +91,53 @@ export default function InsuranceCoveragePlannerPage() {
     } else if (lifePreference === 'whole') {
       lifeInsurancePremium = (adjustedLifeInsurance / 100000) * 800 // Approximate
     }
-    
+
     // Health Insurance Premium
     const healthInsurancePremium = (healthInsuranceNeed / 100000) * 150 * (age < 40 ? 1 : age < 50 ? 1.3 : 1.6)
-    
+
     // Critical Illness Premium
     const criticalIllnessPremium = (criticalIllnessNeed / 100000) * 100
-    
+
     // Disability Insurance Premium
     const disabilityInsurancePremium = (disabilityMonthlyBenefit / 1000) * 30
-    
+
     // Property Insurance Premium
     let propertyInsurancePremium = 0
     if (propertyInsuranceNeed > 0) {
       propertyInsurancePremium = (propertyInsuranceNeed / 100000) * 200
     }
-    
+
     // Total Annual Premium
-    const totalAnnualPremium = 
-      lifeInsurancePremium + 
-      healthInsurancePremium + 
+    const totalAnnualPremium =
+      lifeInsurancePremium +
+      healthInsurancePremium +
       criticalIllnessPremium +
       (disabilityPreference === 'yes' || disabilityPreference === 'optional' ? disabilityInsurancePremium : 0) +
       propertyInsurancePremium
-    
+
     // 6. PROTECTION COVERAGE SCORE (0-100)
     let protectionScore = 0
-    
+
     // Life insurance score
     if (adjustedLifeInsurance >= annualIncome * 10) protectionScore += 30
     else if (adjustedLifeInsurance >= annualIncome * 5) protectionScore += 20
     else protectionScore += 10
-    
+
     // Health insurance score
     if (healthPreference === 'premium') protectionScore += 25
     else if (healthPreference === 'comprehensive') protectionScore += 15
     else protectionScore += 8
-    
+
     // Disability insurance score
     if (disabilityPreference === 'yes') protectionScore += 20
     else if (disabilityPreference === 'optional') protectionScore += 10
-    
+
     // Property insurance score
     if (propertyInsuranceNeed > 0) protectionScore += 15
-    
+
     // Age/Health adjustment
     if (age < 40 && health === 'good') protectionScore += 5
-    
+
     return {
       lifeInsuranceNeed: Math.round(adjustedLifeInsurance),
       healthInsuranceNeed: healthInsuranceNeed,
@@ -170,16 +170,16 @@ export default function InsuranceCoveragePlannerPage() {
 
   const handleCalculate = (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (income <= 0) {
       alert('Please enter a valid income')
       return
     }
-    
+
     const calculatedResults = calculateInsuranceNeeds()
     setResults(calculatedResults)
     setShowResults(true)
-    
+
     setTimeout(() => {
       const resultsElement = document.getElementById('results-section')
       if (resultsElement) {
@@ -220,21 +220,21 @@ export default function InsuranceCoveragePlannerPage() {
     return 'bg-red-400'
   }
 
-  const premiumPercentOfIncome = results && income > 0 
-    ? (results.totalAnnualPremium / (income * 12)) * 100 
+  const premiumPercentOfIncome = results && income > 0
+    ? (results.totalAnnualPremium / (income * 12)) * 100
     : 0
 
   return (
     <div className="min-h-screen bg-black text-foreground">
       <ScrollProgress />
       <Header />
-      
+
       <main className="pt-20 pb-32">
         <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl">
           {/* Back Button */}
           <div className="mb-8">
-            <Link 
-              href="/tools" 
+            <Link
+              href="/advisory"
               className="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors font-mono text-sm uppercase tracking-widest"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -250,7 +250,7 @@ export default function InsuranceCoveragePlannerPage() {
             <p className="text-secondary mx-auto max-w-3xl text-lg md:text-xl leading-relaxed mb-6">
               {t.insurancePlanner.header.subtitle}
             </p>
-            
+
             {/* Notice Box */}
             <div className="max-w-4xl mx-auto p-6 bg-yellow-900/20 border border-yellow-800/50 rounded-xl">
               <p className="text-yellow-200 text-sm leading-relaxed">
@@ -267,7 +267,7 @@ export default function InsuranceCoveragePlannerPage() {
                 <h3 className="text-xl font-semibold text-primary mb-6 uppercase tracking-widest font-mono text-sm">
                   Personal & Family Profile
                 </h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -283,7 +283,7 @@ export default function InsuranceCoveragePlannerPage() {
                       className="w-full px-4 py-3 bg-black border border-zinc-800 rounded-lg text-primary font-mono focus:outline-none focus:border-primary transition-colors"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.insurancePlanner.input.gender_label}
@@ -299,7 +299,7 @@ export default function InsuranceCoveragePlannerPage() {
                       <option value="preferNot">{t.insurancePlanner.gender.preferNot}</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.insurancePlanner.input.smoking_label}
@@ -315,7 +315,7 @@ export default function InsuranceCoveragePlannerPage() {
                       <option value="ex">{t.insurancePlanner.smoking.ex}</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.insurancePlanner.input.health_label}
@@ -332,7 +332,7 @@ export default function InsuranceCoveragePlannerPage() {
                       <option value="poor">{t.insurancePlanner.health.poor}</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.insurancePlanner.input.dependents_label}
@@ -345,7 +345,7 @@ export default function InsuranceCoveragePlannerPage() {
                       className="w-full px-4 py-3 bg-black border border-zinc-800 rounded-lg text-primary font-mono focus:outline-none focus:border-primary transition-colors"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.insurancePlanner.input.spouseIncome_label}
@@ -369,7 +369,7 @@ export default function InsuranceCoveragePlannerPage() {
                 <h3 className="text-xl font-semibold text-primary mb-6 uppercase tracking-widest font-mono text-sm">
                   Financial Profile
                 </h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -387,7 +387,7 @@ export default function InsuranceCoveragePlannerPage() {
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary font-mono">RM</span>
                     </div>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.insurancePlanner.input.debts_label}
@@ -403,7 +403,7 @@ export default function InsuranceCoveragePlannerPage() {
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary font-mono">RM</span>
                     </div>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.insurancePlanner.input.assets_label}
@@ -419,7 +419,7 @@ export default function InsuranceCoveragePlannerPage() {
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary font-mono">RM</span>
                     </div>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.insurancePlanner.input.homeOwnership_label}
@@ -435,7 +435,7 @@ export default function InsuranceCoveragePlannerPage() {
                       <option value="planning">{t.insurancePlanner.homeOwnership.planning}</option>
                     </select>
                   </div>
-                  
+
                   {homeOwnership !== 'renting' && (
                     <div>
                       <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -461,7 +461,7 @@ export default function InsuranceCoveragePlannerPage() {
                 <h3 className="text-xl font-semibold text-primary mb-6 uppercase tracking-widest font-mono text-sm">
                   {t.insurancePlanner.input.goal_label}
                 </h3>
-                
+
                 <div className="space-y-4">
                   <label className="flex items-start gap-3 p-4 bg-black border border-zinc-800 rounded-lg cursor-pointer hover:border-zinc-700 transition-colors">
                     <input
@@ -476,7 +476,7 @@ export default function InsuranceCoveragePlannerPage() {
                       <div className="text-primary font-semibold">{t.insurancePlanner.goal.a}</div>
                     </div>
                   </label>
-                  
+
                   <label className="flex items-start gap-3 p-4 bg-black border border-zinc-800 rounded-lg cursor-pointer hover:border-zinc-700 transition-colors">
                     <input
                       type="radio"
@@ -490,7 +490,7 @@ export default function InsuranceCoveragePlannerPage() {
                       <div className="text-primary font-semibold">{t.insurancePlanner.goal.b}</div>
                     </div>
                   </label>
-                  
+
                   <label className="flex items-start gap-3 p-4 bg-black border border-zinc-800 rounded-lg cursor-pointer hover:border-zinc-700 transition-colors">
                     <input
                       type="radio"
@@ -504,7 +504,7 @@ export default function InsuranceCoveragePlannerPage() {
                       <div className="text-primary font-semibold">{t.insurancePlanner.goal.c}</div>
                     </div>
                   </label>
-                  
+
                   <label className="flex items-start gap-3 p-4 bg-black border border-zinc-800 rounded-lg cursor-pointer hover:border-zinc-700 transition-colors">
                     <input
                       type="radio"
@@ -526,7 +526,7 @@ export default function InsuranceCoveragePlannerPage() {
                 <h3 className="text-xl font-semibold text-primary mb-6 uppercase tracking-widest font-mono text-sm">
                   Coverage Preferences
                 </h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -542,7 +542,7 @@ export default function InsuranceCoveragePlannerPage() {
                       <option value="combination">{t.insurancePlanner.lifePreference.combination}</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.insurancePlanner.input.healthPreference_label}
@@ -557,7 +557,7 @@ export default function InsuranceCoveragePlannerPage() {
                       <option value="premium">{t.insurancePlanner.healthPreference.premium}</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                       {t.insurancePlanner.input.disabilityPreference_label}
@@ -805,7 +805,7 @@ export default function InsuranceCoveragePlannerPage() {
                     <ArrowRight className="w-4 h-4" />
                   </a>
                   <Link
-                    href="/tools"
+                    href="/advisory"
                     className="flex-1 px-6 py-3 bg-transparent border border-zinc-800 rounded-full text-secondary font-mono text-sm uppercase tracking-widest hover:bg-zinc-900/50 hover:border-zinc-700 transition-all flex items-center justify-center gap-2"
                   >
                     {t.insurancePlanner.btn.tools}

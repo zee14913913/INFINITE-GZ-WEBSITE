@@ -25,17 +25,17 @@ interface StrategyResult {
 
 export default function CardSimulatorPage() {
   const { t } = useLanguage()
-  
+
   // Credit cards
   const [cards, setCards] = useState<CreditCard[]>([
     { id: '1', name: '', balance: 0, rate: 18, minPayment: 0 }
   ])
-  
+
   // Strategy parameters
   const [aggressiveBudget, setAggressiveBudget] = useState<number>(0)
   const [consolRate, setConsolRate] = useState<number>(7)
   const [consolTenure, setConsolTenure] = useState<number>(7)
-  
+
   // Results
   const [results, setResults] = useState<{
     strategy1: StrategyResult
@@ -175,7 +175,7 @@ export default function CardSimulatorPage() {
         const activeCards = workingCards.filter(c => c.currentBalance > 0)
         if (activeCards.length === 0) break
 
-        const highestRateCard = activeCards.reduce((max, card) => 
+        const highestRateCard = activeCards.reduce((max, card) =>
           card.rate > max.rate ? card : max
         )
 
@@ -202,7 +202,7 @@ export default function CardSimulatorPage() {
   // Strategy 3: Consolidation loan
   const calculateStrategy3 = (): StrategyResult => {
     const totalBalance = cards.reduce((sum, c) => sum + c.balance, 0)
-    
+
     if (totalBalance <= 0) {
       return { months: 0, totalInterest: 0, monthlyPayment: 0 }
     }
@@ -243,7 +243,7 @@ export default function CardSimulatorPage() {
 
   const handleSimulate = (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (cards.length === 0 || cards.every(c => c.balance === 0)) {
       alert('Please enter at least one credit card with a balance')
       return
@@ -305,13 +305,13 @@ export default function CardSimulatorPage() {
     <div className="min-h-screen bg-black text-foreground">
       <ScrollProgress />
       <Header />
-      
+
       <main className="pt-20 pb-32">
         <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl">
           {/* Back Button */}
           <div className="mb-8">
-            <Link 
-              href="/tools" 
+            <Link
+              href="/advisory"
               className="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors font-mono text-sm uppercase tracking-widest"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -327,7 +327,7 @@ export default function CardSimulatorPage() {
             <p className="text-secondary mx-auto max-w-3xl text-lg md:text-xl leading-relaxed mb-6">
               {t.cardSimulator.header.subtitle}
             </p>
-            
+
             {/* Info Box */}
             <div className="max-w-4xl mx-auto p-6 bg-blue-900/20 border border-blue-800/50 rounded-xl">
               <p className="text-blue-200 text-sm leading-relaxed">
@@ -357,7 +357,7 @@ export default function CardSimulatorPage() {
                     {t.cardSimulator.btn.addCard}
                   </button>
                 </div>
-                
+
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
@@ -605,7 +605,7 @@ export default function CardSimulatorPage() {
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                   <Link
-                    href="/tools"
+                    href="/advisory"
                     className="flex-1 px-6 py-3 bg-transparent border border-zinc-800 rounded-full text-secondary font-mono text-sm uppercase tracking-widest hover:bg-zinc-900/50 hover:border-zinc-700 transition-all flex items-center justify-center gap-2"
                   >
                     {t.cardSimulator.btn.exploreTools}

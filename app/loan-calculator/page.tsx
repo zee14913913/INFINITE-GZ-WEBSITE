@@ -183,7 +183,7 @@ export default function LoanCalculatorPage() {
           {/* Back Button */}
           <div className="mb-8">
             <Link
-              href="/tools"
+              href="/advisory"
               className="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors font-mono text-sm uppercase tracking-widest"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -515,7 +515,7 @@ export default function LoanCalculatorPage() {
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                   <Link
-                    href="/tools"
+                    href="/advisory"
                     className="flex-1 px-6 py-3 bg-transparent border border-zinc-800 rounded-full text-secondary font-mono text-sm uppercase tracking-widest hover:bg-zinc-900/50 hover:border-zinc-700 transition-all flex items-center justify-center gap-2"
                   >
                     {t.loanCalculator.btn.exploreMore}

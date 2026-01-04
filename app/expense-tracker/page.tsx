@@ -37,18 +37,18 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default function ExpenseTrackerPage() {
   const { t } = useLanguage()
-  
+
   // State
   const [expenses, setExpenses] = useState<Expense[]>([])
   const [budgets, setBudgets] = useState<Budget[]>([])
   const [income, setIncome] = useState<number>(0)
-  
+
   // Form state
   const [formDate, setFormDate] = useState<string>(new Date().toISOString().split('T')[0])
   const [formCategory, setFormCategory] = useState<string>('food')
   const [formAmount, setFormAmount] = useState<number>(0)
   const [formDescription, setFormDescription] = useState<string>('')
-  
+
   // Filter state
   const [filterDateRange, setFilterDateRange] = useState<string>('current')
   const [filterCategory, setFilterCategory] = useState<string>('all')
@@ -59,11 +59,11 @@ export default function ExpenseTrackerPage() {
     const savedExpenses = localStorage.getItem('expenseTracker_expenses')
     const savedBudgets = localStorage.getItem('expenseTracker_budgets')
     const savedIncome = localStorage.getItem('expenseTracker_income')
-    
+
     if (savedExpenses) {
       setExpenses(JSON.parse(savedExpenses))
     }
-    
+
     if (savedBudgets) {
       setBudgets(JSON.parse(savedBudgets))
     } else {
@@ -71,7 +71,7 @@ export default function ExpenseTrackerPage() {
       const defaultBudgets: Budget[] = CATEGORIES.map(cat => ({ category: cat, budget: 0 }))
       setBudgets(defaultBudgets)
     }
-    
+
     if (savedIncome) {
       setIncome(parseFloat(savedIncome))
     }
@@ -101,7 +101,7 @@ export default function ExpenseTrackerPage() {
     const now = new Date()
     const currentMonth = now.getMonth()
     const currentYear = now.getFullYear()
-    
+
     return expenses.filter(exp => {
       const expDate = new Date(exp.date)
       return expDate.getMonth() === currentMonth && expDate.getFullYear() === currentYear
@@ -111,7 +111,7 @@ export default function ExpenseTrackerPage() {
   // Get filtered expenses
   const getFilteredExpenses = (): Expense[] => {
     let filtered = expenses
-    
+
     // Date range filter
     if (filterDateRange === 'current') {
       filtered = getCurrentMonthExpenses()
@@ -119,23 +119,23 @@ export default function ExpenseTrackerPage() {
       const now = new Date()
       const lastMonth = now.getMonth() === 0 ? 11 : now.getMonth() - 1
       const lastYear = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear()
-      
+
       filtered = expenses.filter(exp => {
         const expDate = new Date(exp.date)
         return expDate.getMonth() === lastMonth && expDate.getFullYear() === lastYear
       })
     }
-    
+
     // Category filter
     if (filterCategory !== 'all') {
       filtered = filtered.filter(exp => exp.category === filterCategory)
     }
-    
+
     // Amount filter
     if (filterMinAmount > 0) {
       filtered = filtered.filter(exp => exp.amount >= filterMinAmount)
     }
-    
+
     return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   }
 
@@ -143,13 +143,13 @@ export default function ExpenseTrackerPage() {
   const getSpendingByCategory = (): Record<string, number> => {
     const monthExpenses = getCurrentMonthExpenses()
     const spending: Record<string, number> = {}
-    
+
     CATEGORIES.forEach(cat => {
       spending[cat] = monthExpenses
         .filter(exp => exp.category === cat)
         .reduce((sum, exp) => sum + exp.amount, 0)
     })
-    
+
     return spending
   }
 
@@ -168,12 +168,12 @@ export default function ExpenseTrackerPage() {
   // Handle add expense
   const handleAddExpense = (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (formAmount <= 0) {
       alert('Please enter a valid amount')
       return
     }
-    
+
     const newExpense: Expense = {
       id: Date.now().toString(),
       date: formDate,
@@ -181,9 +181,9 @@ export default function ExpenseTrackerPage() {
       amount: formAmount,
       description: formDescription,
     }
-    
+
     setExpenses([...expenses, newExpense])
-    
+
     // Reset form
     setFormAmount(0)
     setFormDescription('')
@@ -191,7 +191,7 @@ export default function ExpenseTrackerPage() {
 
   // Handle budget update
   const handleBudgetUpdate = (category: string, budget: number) => {
-    setBudgets(budgets.map(b => 
+    setBudgets(budgets.map(b =>
       b.category === category ? { ...b, budget } : b
     ))
   }
@@ -212,7 +212,7 @@ export default function ExpenseTrackerPage() {
       exp.description || '',
       exp.amount.toFixed(2),
     ])
-    
+
     const csv = [headers.join(','), ...rows.map(row => row.join(','))].join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
@@ -226,7 +226,7 @@ export default function ExpenseTrackerPage() {
   // Get insights
   const getInsights = () => {
     const monthExpenses = getCurrentMonthExpenses()
-    
+
     // Highest spending category
     let highestCategory = ''
     let highestAmount = 0
@@ -236,13 +236,13 @@ export default function ExpenseTrackerPage() {
         highestCategory = cat
       }
     })
-    
+
     const highestPercent = totalExpenses > 0 ? (highestAmount / totalExpenses) * 100 : 0
-    
+
     // Most frequent
     const transactionCount = monthExpenses.length
     const averageTransaction = transactionCount > 0 ? totalExpenses / transactionCount : 0
-    
+
     // Budget status
     let onTrackCount = 0
     let overBudgetCount = 0
@@ -256,7 +256,7 @@ export default function ExpenseTrackerPage() {
         }
       }
     })
-    
+
     // Saving recommendation
     let recommendation = ''
     if (highestAmount > 0 && highestCategory) {
@@ -266,7 +266,7 @@ export default function ExpenseTrackerPage() {
         .replace(/\{\{percent\}\}/g, '20')
         .replace(/\{\{savings\}\}/g, savings.toFixed(0))
     }
-    
+
     return {
       highestCategory,
       highestAmount,
@@ -306,13 +306,13 @@ export default function ExpenseTrackerPage() {
     <div className="min-h-screen bg-black text-foreground">
       <ScrollProgress />
       <Header />
-      
+
       <main className="pt-20 pb-32">
         <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl">
           {/* Back Button */}
           <div className="mb-8">
-            <Link 
-              href="/tools" 
+            <Link
+              href="/advisory"
               className="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors font-mono text-sm uppercase tracking-widest"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -336,7 +336,7 @@ export default function ExpenseTrackerPage() {
               <h3 className="text-xl font-semibold text-primary mb-6 uppercase tracking-widest font-mono text-sm">
                 Quick Expense Entry
               </h3>
-              
+
               <form onSubmit={handleAddExpense} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -350,7 +350,7 @@ export default function ExpenseTrackerPage() {
                     className="w-full px-4 py-3 bg-black border border-zinc-800 rounded-lg text-primary font-mono focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                     {t.expenseTracker.input.category_label}
@@ -366,7 +366,7 @@ export default function ExpenseTrackerPage() {
                     ))}
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                     {t.expenseTracker.input.amount_label}
@@ -384,7 +384,7 @@ export default function ExpenseTrackerPage() {
                     <span className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary font-mono">RM</span>
                   </div>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                     {t.expenseTracker.input.description_label}
@@ -397,7 +397,7 @@ export default function ExpenseTrackerPage() {
                     className="w-full px-4 py-3 bg-black border border-zinc-800 rounded-lg text-primary focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
-                
+
                 <div className="flex items-end">
                   <button
                     type="submit"
@@ -417,7 +417,7 @@ export default function ExpenseTrackerPage() {
               <h3 className="text-xl font-semibold text-primary mb-6 uppercase tracking-widest font-mono text-sm">
                 {t.expenseTracker.dashboard.currentMonth}
               </h3>
-              
+
               {/* Income Input */}
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
@@ -434,7 +434,7 @@ export default function ExpenseTrackerPage() {
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary font-mono">RM</span>
                 </div>
               </div>
-              
+
               {/* Summary Cards */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div className="bg-black border border-zinc-800 rounded-xl p-4">
@@ -443,7 +443,7 @@ export default function ExpenseTrackerPage() {
                   </span>
                   <div className="text-2xl font-bold text-primary">{formatCurrency(totalExpenses)}</div>
                 </div>
-                
+
                 <div className="bg-black border border-zinc-800 rounded-xl p-4">
                   <span className="text-xs text-secondary uppercase tracking-widest font-mono block mb-1">
                     {t.expenseTracker.dashboard.remainingBalance}
@@ -452,7 +452,7 @@ export default function ExpenseTrackerPage() {
                     {formatCurrency(remainingBalance)}
                   </div>
                 </div>
-                
+
                 <div className="bg-black border border-zinc-800 rounded-xl p-4">
                   <span className="text-xs text-secondary uppercase tracking-widest font-mono block mb-1">
                     {t.expenseTracker.dashboard.savingsRate}
@@ -462,7 +462,7 @@ export default function ExpenseTrackerPage() {
                     {savingsRate.toFixed(1)}%
                   </div>
                 </div>
-                
+
                 <div className="bg-black border border-zinc-800 rounded-xl p-4">
                   <span className="text-xs text-secondary uppercase tracking-widest font-mono block mb-1">
                     Transactions
@@ -482,7 +482,7 @@ export default function ExpenseTrackerPage() {
                     const percent = totalExpenses > 0 ? (spent / totalExpenses) * 100 : 0
                     const budget = budgets.find(b => b.category === cat)?.budget || 0
                     const overBudget = budget > 0 && spent > budget
-                    
+
                     return (
                       <div key={cat} className="space-y-1">
                         <div className="flex justify-between items-center text-sm">
@@ -528,7 +528,7 @@ export default function ExpenseTrackerPage() {
                   {t.expenseTracker.btn.saveBudget}
                 </button>
               </div>
-              
+
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -556,7 +556,7 @@ export default function ExpenseTrackerPage() {
                       const spent = spendingByCategory[cat] || 0
                       const percentUsed = budget > 0 ? (spent / budget) * 100 : 0
                       const remaining = budget - spent
-                      
+
                       return (
                         <tr key={cat} className="border-b border-zinc-800">
                           <td className="py-3 px-4 text-primary">{getCategoryName(cat)}</td>
@@ -603,7 +603,7 @@ export default function ExpenseTrackerPage() {
                   {t.expenseTracker.btn.export}
                 </button>
               </div>
-              
+
               {/* Filters */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div>
@@ -620,7 +620,7 @@ export default function ExpenseTrackerPage() {
                     <option value="all">All Time</option>
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                     Category
@@ -636,7 +636,7 @@ export default function ExpenseTrackerPage() {
                     ))}
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono text-xs">
                     Min Amount (RM)
@@ -650,7 +650,7 @@ export default function ExpenseTrackerPage() {
                   />
                 </div>
               </div>
-              
+
               {/* Expense Table */}
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -699,7 +699,7 @@ export default function ExpenseTrackerPage() {
                 <h3 className="text-xl font-semibold text-primary mb-6 uppercase tracking-widest font-mono text-sm">
                   Monthly Spending Insights
                 </h3>
-                
+
                 <div className="space-y-4">
                   {insights.highestCategory && (
                     <div className="bg-black border border-zinc-800 rounded-xl p-4">
@@ -711,7 +711,7 @@ export default function ExpenseTrackerPage() {
                       </p>
                     </div>
                   )}
-                  
+
                   <div className="bg-black border border-zinc-800 rounded-xl p-4">
                     <p className="text-secondary">
                       {t.expenseTracker.result.mostFrequent
@@ -719,7 +719,7 @@ export default function ExpenseTrackerPage() {
                         .replace(/\{\{average\}\}/g, formatCurrency(insights.averageTransaction))}
                     </p>
                   </div>
-                  
+
                   <div className="bg-black border border-zinc-800 rounded-xl p-4">
                     <p className="text-secondary">
                       {t.expenseTracker.result.budgetStatus
@@ -727,7 +727,7 @@ export default function ExpenseTrackerPage() {
                         .replace(/\{\{overBudget\}\}/g, insights.overBudgetCount.toString())}
                     </p>
                   </div>
-                  
+
                   {insights.recommendation && (
                     <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4">
                       <p className="text-primary font-semibold">{insights.recommendation}</p>
@@ -770,7 +770,7 @@ export default function ExpenseTrackerPage() {
                   <Download className="w-4 h-4" />
                 </button>
                 <Link
-                  href="/tools"
+                  href="/advisory"
                   className="flex-1 px-6 py-3 bg-transparent border border-zinc-800 rounded-full text-secondary font-mono text-sm uppercase tracking-widest hover:bg-zinc-900/50 hover:border-zinc-700 transition-all flex items-center justify-center gap-2"
                 >
                   {t.expenseTracker.btn.tools}

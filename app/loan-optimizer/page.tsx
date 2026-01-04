@@ -47,13 +47,13 @@ interface AnalysisResult {
 
 export default function LoanOptimizerPage() {
   const { t } = useLanguage()
-  
+
   // Primary concern
   const [concern, setConcern] = useState<string>('')
-  
+
   // CTOS upload
   const [ctosFile, setCtosFile] = useState<File | null>(null)
-  
+
   // Credit profile
   const [creditScore, setCreditScore] = useState<number>(0)
   const [repaymentBehaviour, setRepaymentBehaviour] = useState<string>('')
@@ -61,17 +61,17 @@ export default function LoanOptimizerPage() {
   const [sector, setSector] = useState<string>('')
   const [age, setAge] = useState<number>(0)
   const [savings, setSavings] = useState<number>(0)
-  
+
   // Income & constraints
   const [monthlyIncome, setMonthlyIncome] = useState<number>(5000)
   const [otherCommit, setOtherCommit] = useState<number>(0)
   const [targetDSR, setTargetDSR] = useState<number>(50)
-  
+
   // Loans table
   const [loans, setLoans] = useState<LoanRow[]>([
     { id: '1', type: 'creditCard', bank: '', outstanding: 0, rate: 18, tenure: 0, payment: 0 }
   ])
-  
+
   // Results
   const [results, setResults] = useState<AnalysisResult | null>(null)
   const [showResults, setShowResults] = useState(false)
@@ -104,23 +104,23 @@ export default function LoanOptimizerPage() {
     let currentTotalOutstanding = 0
     let unsecuredOutstanding = 0
     let securedOutstanding = 0
-    
+
     loans.forEach(loan => {
       currentTotalMonthly += loan.payment
       currentTotalOutstanding += loan.outstanding
-      
+
       if (['creditCard', 'personal', 'overdraft', 'business'].includes(loan.type)) {
         unsecuredOutstanding += loan.outstanding
       } else {
         securedOutstanding += loan.outstanding
       }
     })
-    
+
     const currentDSR = (currentTotalMonthly / monthlyIncome) * 100
-    
+
     // 2. CREDIT HEALTH ASSESSMENT
     let creditHealthScore = 50
-    
+
     // DSR score (30 points)
     let dsrScore = 0
     const dsrRatio = currentDSR / 100
@@ -131,7 +131,7 @@ export default function LoanOptimizerPage() {
     else if (dsrRatio < 0.70) dsrScore = 12
     else dsrScore = 0
     creditHealthScore += dsrScore
-    
+
     // CTOS score (25 points)
     let ctosScore = 0
     if (creditScore >= 800) ctosScore = 25
@@ -139,7 +139,7 @@ export default function LoanOptimizerPage() {
     else if (creditScore >= 500) ctosScore = 12
     else ctosScore = 0
     creditHealthScore += ctosScore
-    
+
     // Repayment behaviour (20 points)
     let repayScore = 0
     if (repaymentBehaviour === 'excellent') repayScore = 20
@@ -147,7 +147,7 @@ export default function LoanOptimizerPage() {
     else if (repaymentBehaviour === 'fair') repayScore = 8
     else repayScore = 0
     creditHealthScore += repayScore
-    
+
     // Employment stability (15 points)
     let empScore = 0
     if (employment === 'govt') empScore = 15
@@ -156,43 +156,43 @@ export default function LoanOptimizerPage() {
     else if (employment === 'parttime') empScore = 4
     else empScore = 0
     creditHealthScore += empScore
-    
+
     // Age (10 points)
     let ageScore = 0
     if (age >= 30 && age <= 55) ageScore = 10
     else if ((age >= 25 && age < 30) || (age > 55 && age <= 65)) ageScore = 7
     else ageScore = 0
     creditHealthScore += ageScore
-    
+
     // Determine status
     let creditHealthStatus: 'excellent' | 'good' | 'fair' | 'poor'
     if (creditHealthScore >= 85) creditHealthStatus = 'excellent'
     else if (creditHealthScore >= 70) creditHealthStatus = 'good'
     else if (creditHealthScore >= 50) creditHealthStatus = 'fair'
     else creditHealthStatus = 'poor'
-    
+
     // 3. APPROVAL ODDS (Before)
     let approvalOdds = 0
     if (dsrRatio < 0.50) approvalOdds += 40
     else if (dsrRatio < 0.60) approvalOdds += 25
     else if (dsrRatio < 0.70) approvalOdds += 10
-    
+
     if (creditHealthStatus === 'excellent') approvalOdds += 35
     else if (creditHealthStatus === 'good') approvalOdds += 25
     else if (creditHealthStatus === 'fair') approvalOdds += 12
-    
+
     const stabilityScore = (empScore + ageScore) / 2
     if (stabilityScore >= 12) approvalOdds += 25
     else if (stabilityScore >= 8) approvalOdds += 15
     else if (stabilityScore >= 4) approvalOdds += 8
-    
+
     approvalOdds = Math.min(approvalOdds, 100)
-    
+
     // 4. OPTIMIZED STATE
     const consolidationRate = 7
     const consolidationTenure = 7
     const consolidationAmount = unsecuredOutstanding
-    
+
     let consolidatedMonthly = 0
     if (consolidationAmount > 0) {
       const monthlyRate = consolidationRate / 100 / 12
@@ -201,32 +201,32 @@ export default function LoanOptimizerPage() {
       const denominator = Math.pow(1 + monthlyRate, numMonths) - 1
       consolidatedMonthly = consolidationAmount * (numerator / denominator)
     }
-    
+
     let securedMonthly = 0
     loans.forEach(loan => {
       if (['housing', 'car'].includes(loan.type)) {
         securedMonthly += loan.payment
       }
     })
-    
+
     const optimizedTotalMonthly = otherCommit + securedMonthly + consolidatedMonthly
     const optimizedDSR = (optimizedTotalMonthly / monthlyIncome) * 100
-    
+
     // Recalculate approval odds after
     let optimizedApprovalOdds = 0
     const optimizedDSRRatio = optimizedDSR / 100
     if (optimizedDSRRatio < 0.50) optimizedApprovalOdds += 40
     else if (optimizedDSRRatio < 0.60) optimizedApprovalOdds += 25
     else if (optimizedDSRRatio < 0.70) optimizedApprovalOdds += 10
-    
+
     optimizedApprovalOdds += (creditHealthScore / 100 * 35)
     optimizedApprovalOdds += (stabilityScore / 20 * 25)
     optimizedApprovalOdds = Math.min(optimizedApprovalOdds, 100)
-    
+
     // 5. SAVINGS
     const consolidatedTotalInterest = (consolidatedMonthly * consolidationTenure * 12) - consolidationAmount
     const monthlySavings = currentTotalMonthly - optimizedTotalMonthly
-    
+
     return {
       currentTotalMonthly,
       currentDSR,
@@ -271,7 +271,7 @@ export default function LoanOptimizerPage() {
   const getRecommendation = (concern: string, result: AnalysisResult): string => {
     const recKey = `rec_${concern}` as keyof typeof t.loanOptimizer.result
     let recommendation = t.loanOptimizer.result[recKey] as string
-    
+
     // Replace placeholders
     recommendation = recommendation.replace(/\{\{count\}\}/g, result.unsecuredLoans.length.toString())
     recommendation = recommendation.replace(/\{\{current\}\}/g, formatCurrency(result.currentTotalMonthly))
@@ -283,7 +283,7 @@ export default function LoanOptimizerPage() {
     recommendation = recommendation.replace(/\{\{optimizedOdds\}\}/g, formatPercentage(result.optimizedApprovalOdds))
     recommendation = recommendation.replace(/\{\{totalInterestSaved\}\}/g, formatCurrency(result.consolidatedTotalInterest))
     recommendation = recommendation.replace(/\{\{consolidationTenure\}\}/g, '7')
-    
+
     // Calculate weighted average rate for unsecured loans
     let totalInterest = 0
     let totalOutstanding = 0
@@ -293,33 +293,33 @@ export default function LoanOptimizerPage() {
     })
     const weightedRate = totalOutstanding > 0 ? (totalInterest / totalOutstanding) * 100 : 0
     recommendation = recommendation.replace(/\{\{currentWeightedRate\}\}/g, formatPercentage(weightedRate, 1))
-    
+
     // Estimate months to pay off (rough calculation)
     const monthsToPayOff = result.consolidationAmount > 0 && result.monthlySavings > 0
       ? Math.ceil(result.consolidationAmount / (result.consolidatedMonthly + result.monthlySavings))
       : 84
     recommendation = recommendation.replace(/\{\{months\}\}/g, monthsToPayOff.toString())
-    
+
     return recommendation
   }
 
   const handleAnalyze = (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (monthlyIncome <= 0) {
       alert('Please enter a valid monthly income')
       return
     }
-    
+
     if (loans.length === 0 || loans.every(l => l.outstanding === 0)) {
       alert('Please enter at least one loan')
       return
     }
-    
+
     const analysisResults = analyzeOptimization()
     setResults(analysisResults)
     setShowResults(true)
-    
+
     setTimeout(() => {
       const resultsElement = document.getElementById('results-section')
       if (resultsElement) {
@@ -357,13 +357,13 @@ export default function LoanOptimizerPage() {
     <div className="min-h-screen bg-black text-foreground">
       <ScrollProgress />
       <Header />
-      
+
       <main className="pt-20 pb-32">
         <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl">
           {/* Back Button */}
           <div className="mb-8">
-            <Link 
-              href="/tools" 
+            <Link
+              href="/advisory"
               className="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors font-mono text-sm uppercase tracking-widest"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -379,7 +379,7 @@ export default function LoanOptimizerPage() {
             <p className="text-secondary mx-auto max-w-3xl text-lg md:text-xl leading-relaxed mb-6">
               {t.loanOptimizer.header.subtitle}
             </p>
-            
+
             {/* Important Notice Box */}
             <div className="max-w-4xl mx-auto p-6 bg-blue-900/20 border border-blue-800/50 rounded-xl">
               <p className="text-blue-200 text-sm leading-relaxed">
@@ -558,7 +558,7 @@ export default function LoanOptimizerPage() {
                     {t.loanOptimizer.btn.addLoan}
                   </button>
                 </div>
-                
+
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
@@ -964,7 +964,7 @@ export default function LoanOptimizerPage() {
                     <ArrowRight className="w-4 h-4" />
                   </a>
                   <Link
-                    href="/tools"
+                    href="/advisory"
                     className="flex-1 px-6 py-3 bg-transparent border border-zinc-800 rounded-full text-secondary font-mono text-sm uppercase tracking-widest hover:bg-zinc-900/50 hover:border-zinc-700 transition-all flex items-center justify-center gap-2"
                   >
                     {t.loanOptimizer.btn.exploreMore}
