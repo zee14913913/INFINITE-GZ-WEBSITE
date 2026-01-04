@@ -4410,8 +4410,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: '专业信用卡管理',
-        title: '信用卡管理',
-        subtitle: '马来西亚信用卡债务：RM 50.7B。RM 551.8M逾期（1.1%）。逾期付款 = RM 150-300罚款 + 信用评分受损。我们帮您解决。',
+        title: '永不逾期。节省数千。',
+        subtitle: '专业支付管理。每年节省RM 1,200-5,000。',
         description: '再也不会错过付款。最大化奖励。改善信用评分。专业管理一切。',
         cta1: '免费咨询',
         cta2: '计算我的潜力',
@@ -4617,8 +4617,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: '专业财务优化',
-        title: '财务优化',
-        subtitle: '别再申请会拒绝您的银行。我们分析您的DSR，优化债务结构，然后告诉您哪3家银行会真正批准您。',
+        title: '优化DSR。获得批准。',
+        subtitle: '我们分析您的DSR，优化债务，匹配正确的银行。',
         description: '基于8家马来西亚主流银行2025年真实标准（Maybank、CIMB、Hong Leong、RHB等）。60%的贷款申请因DSR超过银行限制而被拒。我们在您申请前修复它。平均批准率提升：60-80%。平均贷款额度增加：RM 100K-500K。',
         cta1: '免费DSR评估',
         cta2: 'WhatsApp咨询',
@@ -4893,8 +4893,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: '关于我们',
-        title: '关于我们',
-        description: 'INFINITE GZ不仅仅是另一个贷款agent。我们优化您的DSR、整合您的债务、规划您的税务，并为您匹配真正会批准的银行——所有这些都在您申请之前完成。500+企业信任我们。平均批准率：84.2%。平均批准时间：21天（市场45天）。',
+        title: '在银行拒绝前解决问题',
+        description: '我们优化DSR、整合债务、匹配银行。500+企业信任我们。84.2%批准率。21天平均。',
       },
       mission: {
         tag: '我们的使命',
@@ -4939,8 +4939,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: '技术基础设施',
-        title: '资源中心',
-        description: '大多数贷款agent使用过时的产品列表。我们使用50+马来西亚银行的实时数据、分析8家银行DSR标准的AI算法，以及智能匹配系统，向您展示哪些银行会真正批准——而非拒绝。真实结果：84.2%批准率 vs 市场平均40%。平均批准时间：21-25天 vs 市场45天。平均释放额外贷款额度：每位客户RM 150K。',
+        title: '50+银行。实时数据。98%准确度。',
+        description: '50+银行的实时数据。84.2%批准率。21-25天平均。',
       },
 
       stats: [
@@ -4968,8 +4968,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: '成功案例与动态',
-        title: '新闻动态',
-        description: '500+客户。RM 5亿+促成。84.2%批准率 vs 市场40%。平均批准时间：21-25天 vs 市场45天。平均释放额外贷款额度：每位客户RM 150K。阅读我们如何帮助企业克服DSR问题、整合债务并获得传统agent无法提供的融资。',
+        title: '真实客户，真实结果',
+        description: '500+客户。RM 5亿+促成。84.2%批准率。阅读成功案例。',
       },
 
       items: [
@@ -4988,8 +4988,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: '加入我们的团队',
-        title: '加入我们',
-        description: '加入一家快速成长的金融科技公司，我们正在改变马来西亚中小企业和个人获得融资的方式。500+客户。RM 5亿+促成。84.2%批准率 vs 市场40%。我们正在构建金融服务的未来——我们需要像您这样有才华的人。',
+        title: '构建金融未来',
+        description: '加入快速成长的金融科技公司。500+客户。RM 5亿+促成。84.2%批准率。',
       },
       benefits: {
         tag: '福利',
@@ -5049,7 +5049,7 @@ export const translations: Record<Language, Translations> = {
       hero: {
         tag: '常见问题',
         title: '常见问题',
-        description: '来自真实客户的真实问题。关于费用、成功率、时间线，以及如果事情不顺利会发生什么，获得诚实的答案。',
+        description: '来自真实客户的真实问题。关于费用、成功率、时间线的诚实答案。',
       },
       items: [
         {
@@ -6459,8 +6459,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Padanan Pinjaman Berkuasa AI',
-        title: 'Berhenti Memohon Kepada Bank Yang Akan Menolak Anda. Kami Tunjukkan Bank Mana Yang Akan Meluluskan.',
-        subtitle: 'Analisis Percuma 2 Minit. Lihat DSR Anda, Dapatkan Cadangan Bank, Ketahui Peluang Kelulusan Anda - Sebelum Anda Membuang Masa Memohon.',
+        title: 'Padanan Bank Pintar. Dapatkan Kelulusan.',
+        subtitle: 'Analisis Percuma 2 Minit. Ketahui Peluang Kelulusan Anda.',
         cta1: 'Mulakan Analisis Percuma',
         cta2: 'Ketahui Lebih Lanjut',
       },
@@ -6517,8 +6517,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Penyelesaian Kewangan Lengkap',
-        title: '8 Perkhidmatan Perniagaan - Percuma Sepenuhnya Untuk Pelanggan Pinjaman',
-        description: 'Kebanyakan ejen pinjaman hanya membantu anda mengisi borang. Kami melakukan lebih: pengoptimuman DSR, penyatuan hutang, perancangan perniagaan, persediaan e-dagang, perakaunan, pengoptimuman cukai - semua PERCUMA apabila anda mendapat pinjaman melalui kami. Kejayaan anda adalah kejayaan kami.',
+        title: '8 Perkhidmatan Percuma Untuk Pelanggan Pinjaman',
+        description: 'Pengoptimuman DSR, penyatuan hutang, perancangan perniagaan, e-dagang, perakaunan, pengoptimuman cukai - semua PERCUMA dengan pinjaman anda.',
       },
       services: {
         tag: '8 Perkhidmatan Teras',
@@ -6599,8 +6599,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Penyelesaian kewangan untuk semua perniagaan Malaysia',
-        title: 'Pinjaman Ditolak? DSR Terlalu Tinggi? Kami Membetulkan Segala-galanya - Kemudian Membuat Anda Diluluskan.',
-        description: 'Kebanyakan ejen pinjaman hanya mengisi borang. Kami melakukan lebih: pengoptimuman DSR, penyatuan hutang, perancangan perniagaan, persediaan e-dagang, perakaunan, pengoptimuman cukai - semuanya PERCUMA apabila anda mendapat pinjaman melalui kami. Kami membuat perniagaan anda sedia pinjaman, kemudian memadankan anda dengan bank yang akan benar-benar meluluskan. Kos pendahuluan sifar. Harga berasaskan kejayaan sahaja.',
+        title: 'Baiki DSR. Dapatkan Kelulusan.',
+        description: 'Kami mengoptimumkan DSR anda, menyatukan hutang, dan memadankan anda dengan bank yang betul. Tiada yuran pendahuluan.',
       },
       products: [
         {
@@ -6771,8 +6771,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Pengurusan Kad Kredit Profesional',
-        title: 'Hentikan Terlepas Bayaran. Jimat RM 1,200-5,000/Tahun. Tingkatkan Skor Kredit Anda.',
-        subtitle: 'Hutang kad kredit Malaysia: RM 50.7B. RM 551.8M tertunggak (1.1%). Bayaran lewat = penalti RM 150-300 + kerosakan skor kredit. Kami membetulkannya.',
+        title: 'Jangan Terlepas Pembayaran. Jimat Ribuan.',
+        subtitle: 'Pengurusan pembayaran profesional. Jimat RM 1,200-5,000/tahun.',
         description: 'Tidak akan terlepas bayaran lagi. Maksimumkan ganjaran. Perbaiki skor kredit. Semua diuruskan secara profesional.',
         cta1: 'Perundingan Percuma',
         cta2: 'Kira Potensi Saya',
@@ -6978,8 +6978,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Pengoptimuman Kewangan Profesional',
-        title: 'DSR Terlalu Tinggi? Kami Mengoptimumkannya, Kemudian Padankan Anda Dengan Bank Yang Akan Meluluskan.',
-        subtitle: 'Berhenti Memohon Kepada Bank Yang Akan Menolak Anda. Kami Menganalisis DSR Anda, Mengoptimumkan Struktur Hutang, Kemudian Tunjukkan 3 Bank Yang Akan Benar-Benar Meluluskan.',
+        title: 'Optimumkan DSR. Dapatkan Kelulusan.',
+        subtitle: 'Kami menganalisis DSR anda, mengoptimumkan hutang, dan memadankan anda dengan bank yang betul.',
         description: 'Berdasarkan piawaian sebenar 2025 dari 8 bank utama Malaysia (Maybank, CIMB, Hong Leong, RHB, dll.). 60% permohonan pinjaman ditolak kerana DSR melebihi had bank. Kami membetulkannya SEBELUM anda memohon. Purata peningkatan kadar kelulusan: 60-80%. Purata peningkatan kapasiti pinjaman: RM 100K-500K.',
         cta1: 'Penilaian DSR Percuma',
         cta2: 'Perundingan WhatsApp',
@@ -7254,8 +7254,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Tentang Kami',
-        title: 'Kami Membaiki Masalah Pembiayaan Sebelum Bank Berkata Tidak',
-        description: 'INFINITE GZ bukan sekadar ejen pinjaman lain. Kami mengoptimumkan DSR anda, menyatukan hutang anda, merancang cukai anda, dan memadankan anda dengan bank yang akan benar-benar meluluskan - semua sebelum anda memohon. 500+ perniagaan mempercayai kami. Kadar kelulusan purata: 84.2%. Masa kelulusan purata: 21 hari (vs pasaran 45 hari).',
+        title: 'Baiki Masalah Sebelum Bank Berkata Tidak',
+        description: 'Kami mengoptimumkan DSR, menyatukan hutang, dan memadankan anda dengan bank. 500+ perniagaan mempercayai kami. Kadar kelulusan 84.2%. Purata 21 hari.',
       },
       mission: {
         tag: 'Misi Kami',
@@ -7300,8 +7300,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Infrastruktur Teknologi',
-        title: '50+ Bank. Data Masa Nyata. 98% Ketepatan Padanan. Beginilah Cara Kami Membuat Anda Diluluskan.',
-        description: 'Kebanyakan ejen pinjaman menggunakan senarai produk yang ketinggalan zaman. Kami menggunakan data masa nyata dari 50+ bank Malaysia, algoritma AI yang menganalisis piawaian DSR 8 bank, dan padanan pintar yang menunjukkan bank mana yang akan benar-benar meluluskan - bukan menolak. Hasil sebenar: 84.2% kadar kelulusan vs purata pasaran 40%. Masa kelulusan purata: 21-25 hari vs pasaran 45 hari. Purata kapasiti pinjaman tambahan dibuka kunci: RM 150K setiap pelanggan.',
+        title: '50+ Bank. Data Masa Nyata. 98% Ketepatan.',
+        description: 'Data masa nyata dari 50+ bank. Kadar kelulusan 84.2%. Purata 21-25 hari.',
       },
 
       stats: [
@@ -7329,8 +7329,8 @@ export const translations: Record<Language, Translations> = {
       },
       hero: {
         tag: 'Kisah Kejayaan & Kemas Kini',
-        title: 'Pelanggan Sebenar, Hasil Sebenar: Bagaimana Kami Membantu Perniagaan Diluluskan',
-        description: '500+ pelanggan. RM 500M+ difasilitasi. 84.2% kadar kelulusan vs pasaran 40%. Masa kelulusan purata: 21-25 hari vs pasaran 45 hari. Purata kapasiti pinjaman tambahan dibuka kunci: RM 150K setiap pelanggan. Baca bagaimana kami membantu perniagaan mengatasi masalah DSR, menyatukan hutang, dan mendapatkan pembiayaan yang ejen tradisional tidak dapat berikan.',
+        title: 'Pelanggan Sebenar, Hasil Sebenar',
+        description: '500+ pelanggan. RM 500M+ difasilitasi. Kadar kelulusan 84.2%. Baca kisah kejayaan.',
       },
 
       items: [
@@ -7350,7 +7350,7 @@ export const translations: Record<Language, Translations> = {
       hero: {
         tag: 'Sertai Pasukan Kami',
         title: 'Membina Masa Depan Kewangan',
-        description: 'Sertai syarikat fintech yang berkembang pesat yang mengubah cara PKS dan individu Malaysia mengakses pembiayaan. 500+ pelanggan. RM 500M+ difasilitasi. 84.2% kadar kelulusan vs pasaran 40%. Kami sedang membina masa depan perkhidmatan kewangan - dan kami memerlukan individu berbakat seperti anda.',
+        description: 'Sertai fintech yang berkembang pesat. 500+ pelanggan. RM 500M+ difasilitasi. Kadar kelulusan 84.2%.',
       },
       benefits: {
         tag: 'Faedah',
@@ -7410,7 +7410,7 @@ export const translations: Record<Language, Translations> = {
       hero: {
         tag: 'Soalan Lazim',
         title: 'Soalan Lazim',
-        description: 'Soalan sebenar daripada pelanggan sebenar. Dapatkan jawapan jujur tentang yuran, kadar kejayaan, garis masa, dan apa yang berlaku jika perkara tidak berjalan lancar.',
+        description: 'Soalan sebenar daripada pelanggan sebenar. Jawapan jujur tentang yuran, kadar kejayaan, dan garis masa.',
       },
       items: [
         {
