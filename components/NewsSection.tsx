@@ -32,7 +32,7 @@ export default function NewsSection() {
         </div>
 
         {/* 新闻网格 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 lg:gap-24">
           {t.home.news.items.map((item, index) => (
             <article
               key={index}

@@ -8,13 +8,13 @@ import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function CreditPilotPage() {
   const { t } = useLanguage()
-  
+
   return (
     <>
       <ScrollProgress />
       <main className="min-h-screen bg-[rgb(10,10,10)]">
         <Header />
-        
+
         {/* Hero Section */}
         <section className="relative pb-px min-h-screen">
           {/* Video Background - z-0 */}
@@ -31,7 +31,7 @@ export default function CreditPilotPage() {
               您的浏览器不支持视频播放
             </video>
           </div>
-          
+
           {/* Gradient Overlay - z-10 轻微底部渐变 */}
           <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/10 via-transparent to-black/50"></div>
 
@@ -42,19 +42,19 @@ export default function CreditPilotPage() {
                 <div className="mono-tag text-secondary text-sm">
                   [ {t.creditpilot.hero.tag} ]
                 </div>
-                
+
                 <div className="text-primary max-w-3xl text-balance text-4xl leading-[2.25rem] tracking-tight md:text-[5rem] md:leading-[5rem]">
                   {t.creditpilot.hero.title}
                 </div>
-                
+
                 <p className="text-secondary max-w-2xl text-lg">
                   {t.creditpilot.hero.subtitle}
                 </p>
-                
+
                 <div>
                   <div className="flex gap-3 sm:flex-row">
-                    <Link 
-                      href="https://portal.infinitegz.com/creditpilot" 
+                    <Link
+                      href="https://portal.infinitegz.com/creditpilot"
                       className="relative isolate inline-flex shrink-0 items-center justify-center border font-mono text-base/6 uppercase tracking-widest gap-x-3 px-4 py-2 sm:text-sm border-[--btn-border] bg-[--btn-bg] text-[--btn-text] hover:border-[--btn-hover] hover:bg-[--btn-hover] rounded-full [--btn-bg:theme(colors.primary)] [--btn-border:theme(colors.primary)] [--btn-hover:theme(colors.primary/80%)] [--btn-text:theme(colors.background)]"
                     >
                       <span className="size-2 animate-pulse rounded-full bg-accent"></span>
@@ -65,7 +65,7 @@ export default function CreditPilotPage() {
               </hgroup>
             </div>
           </div>
-          
+
           {/* 底部激光分隔线 */}
           <div className="absolute bottom-0 left-0 right-0 z-30">
             <div className="laser-divider"></div>
@@ -93,14 +93,14 @@ export default function CreditPilotPage() {
                     <div className="bg-primary absolute -bottom-1 -left-1 z-10 size-2 -translate-x-px translate-y-px"></div>
                     <div className="bg-primary absolute -bottom-1 -right-1 z-10 size-2 translate-x-px translate-y-px"></div>
                   </div>
-                  
+
                   <div className="text-primary mb-10 size-10 sm:mb-16 relative z-20">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1"/>
                       <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
                     </svg>
                   </div>
-                  
+
                   <div className="group max-w-sm grow relative z-20">
                     <h3 className="text-xl group-hover:text-primary text-primary">{feature.title}</h3>
                     <p className="text-secondary mt-4">
@@ -110,7 +110,7 @@ export default function CreditPilotPage() {
                 </div>
               ))}
             </div>
-          
+
       {/* 底部激光分隔线 */}
       <div className="absolute bottom-0 left-0 right-0">
         <div className="laser-divider"></div>
@@ -139,7 +139,7 @@ export default function CreditPilotPage() {
                 </div>
               ))}
             </div>
-          
+
       {/* 底部激光分隔线 */}
       <div className="absolute bottom-0 left-0 right-0">
         <div className="laser-divider"></div>
@@ -158,15 +158,15 @@ export default function CreditPilotPage() {
                 {t.creditpilot.cta.description}
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-                <Link 
-                  href="https://portal.infinitegz.com/creditpilot" 
+                <Link
+                  href="https://portal.infinitegz.com/creditpilot"
                   className="relative isolate inline-flex shrink-0 items-center justify-center border font-mono text-base/6 uppercase tracking-widest gap-x-3 px-6 py-3 sm:text-sm border-[--btn-border] bg-[--btn-bg] text-[--btn-text] hover:border-[--btn-hover] hover:bg-[--btn-hover] rounded-full [--btn-bg:theme(colors.primary)] [--btn-border:theme(colors.primary)] [--btn-hover:theme(colors.primary/80%)] [--btn-text:theme(colors.background)]"
                 >
                   <span>{t.creditpilot.cta.buttonText}</span>
                 </Link>
               </div>
             </div>
-          
+
       {/* 底部激光分隔线 */}
       <div className="absolute bottom-0 left-0 right-0">
         <div className="laser-divider"></div>
