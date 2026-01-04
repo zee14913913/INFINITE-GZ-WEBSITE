@@ -36,7 +36,7 @@ export default function NewsSection() {
           {t.home.news.items.map((item, index) => (
             <article
               key={index}
-              className={`group space-y-6 cursor-pointer transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              className={`group space-y-8 cursor-pointer transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               style={{ transitionDelay: `${(index + 1) * 100}ms` }}
             >
               {/* 日期和分类 */}
