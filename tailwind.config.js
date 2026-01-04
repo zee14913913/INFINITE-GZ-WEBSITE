@@ -22,6 +22,10 @@ module.exports = {
         muted: '#A1A1AA', // 静音色
         card: '#000000', // 卡片背景
         'card-foreground': '#FFFFFF', // 卡片前景
+        // 桃红色按钮
+        pink: {
+          primary: '#FF007F', // 桃红色
+        },
         // 确保所有常用颜色都可用
         white: '#FFFFFF',
         black: '#000000',

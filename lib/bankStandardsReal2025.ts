@@ -9,7 +9,7 @@
 /**
  * 申请人身份类型
  */
-export type ApplicantIdentity = 
+export type ApplicantIdentity =
   | 'malaysian_citizen'      // 马来西亚公民
   | 'permanent_resident'     // 永久居民
   | 'foreigner'              // 外国人
@@ -23,7 +23,7 @@ export type ApplicantIdentity =
 /**
  * 就业类型
  */
-export type EmploymentType = 
+export type EmploymentType =
   | 'salaried'               // 受薪
   | 'self_employed'          // 自雇
   | 'government'             // 政府
@@ -32,11 +32,12 @@ export type EmploymentType =
 /**
  * 贷款类型
  */
-export type LoanType = 
+export type LoanType =
   | 'personal'               // 个人贷款
   | 'housing'                // 房贷
   | 'car'                    // 车贷
-  | 'credit_card';           // 信用卡
+  | 'credit_card'            // 信用卡
+  | 'sme_loan';              // 企业贷款/SME贷款
 
 /**
  * 收入认定规则
@@ -78,20 +79,20 @@ export interface IdentityCondition {
 export interface BankStandardReal {
   bankName: string;
   bankCode: string;
-  
+
   // DSR限制（按贷款类型）
   dsr: {
     [key in LoanType]: DSRLimit[];
   };
-  
+
   // 收入认定规则（按银行）
   incomeRecognition: {
     [key in EmploymentType]: IncomeRecognitionRule;
   };
-  
+
   // 身份条件
   identityConditions: IdentityCondition[];
-  
+
   // 贷款限制
   loanLimits: {
     personalLoanMax: number;
@@ -107,7 +108,7 @@ export interface BankStandardReal {
     };
     creditCardLimitMultiplier: number;
   };
-  
+
   // 其他要求
   requirements: {
     minAge: number;
@@ -117,7 +118,7 @@ export interface BankStandardReal {
     requiresEPF: boolean;
     requiresBankStatement: boolean;
   };
-  
+
   // 特殊优势（如有）
   specialFeatures?: string[];
 }
@@ -129,7 +130,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
   {
     bankName: 'Maybank',
     bankCode: 'MBB',
-    
+
     dsr: {
       personal: [
         { minNetIncome: 0, maxNetIncome: 3500, dsrLimit: 40, notes: '低收入最严格' },
@@ -146,9 +147,13 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       credit_card: [
         { minNetIncome: 0, maxNetIncome: 3500, dsrLimit: 40 },
         { minNetIncome: 3500, dsrLimit: 70 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 65, notes: '中小企业较宽松' },
+        { minNetIncome: 5000, dsrLimit: 75, notes: '大型企业' }
       ]
     },
-    
+
     incomeRecognition: {
       salaried: {
         employmentType: 'salaried',
@@ -176,7 +181,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         notes: '需合约至少12个月有效期'
       }
     },
-    
+
     identityConditions: [
       {
         identity: 'malaysian_citizen',
@@ -207,7 +212,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         specialNotes: '条件严格，70%打折'
       }
     ],
-    
+
     loanLimits: {
       personalLoanMax: 100000,
       personalLoanMultiplier: 10,
@@ -222,7 +227,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       },
       creditCardLimitMultiplier: 2
     },
-    
+
     requirements: {
       minAge: 21,
       maxAge: 60,
@@ -231,7 +236,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       requiresEPF: true,
       requiresBankStatement: true
     },
-    
+
     specialFeatures: [
       '低收入客户最严格（40% DSR）',
       '自雇人士打折较重（70%）'
@@ -242,7 +247,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
   {
     bankName: 'CIMB Bank',
     bankCode: 'CIMB',
-    
+
     dsr: {
       personal: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 65, notes: '低收入最友好' },
@@ -259,9 +264,13 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       credit_card: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 65 },
         { minNetIncome: 3000, dsrLimit: 75 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 70, notes: '对SME较宽松' },
+        { minNetIncome: 5000, dsrLimit: 80, notes: '大型企业' }
       ]
     },
-    
+
     incomeRecognition: {
       salaried: {
         employmentType: 'salaried',
@@ -289,7 +298,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         notes: '对合约接受度高'
       }
     },
-    
+
     identityConditions: [
       {
         identity: 'malaysian_citizen',
@@ -314,7 +323,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         specialNotes: '对自雇最友好（80%认可）'
       }
     ],
-    
+
     loanLimits: {
       personalLoanMax: 250000,
       personalLoanMultiplier: 8,
@@ -329,7 +338,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       },
       creditCardLimitMultiplier: 2.5
     },
-    
+
     requirements: {
       minAge: 21,
       maxAge: 60,
@@ -338,13 +347,14 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       requiresEPF: true,
       requiresBankStatement: true
     },
-    
+
     specialFeatures: [
       '对自雇最友好（认可80%+）',
       'DSR相对宽松（65-75%）',
       '愿意接受PR和某些外国人',
       '低收入友好',
-      '最"包容"的银行'
+      '最"包容"的银行',
+      'SME贷款较宽松（70-80% DSR）'
     ]
   },
 
@@ -352,7 +362,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
   {
     bankName: 'RHB Bank',
     bankCode: 'RHB',
-    
+
     dsr: {
       personal: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 55, notes: '整体较严' },
@@ -369,9 +379,13 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       credit_card: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 55 },
         { minNetIncome: 3000, dsrLimit: 60 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 60, notes: '较严格' },
+        { minNetIncome: 5000, dsrLimit: 65, notes: '高收入' }
       ]
     },
-    
+
     incomeRecognition: {
       salaried: {
         employmentType: 'salaried',
@@ -399,7 +413,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         notes: '较保守'
       }
     },
-    
+
     identityConditions: [
       {
         identity: 'malaysian_citizen',
@@ -421,7 +435,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         specialNotes: '困难（仅60%认可）'
       }
     ],
-    
+
     loanLimits: {
       personalLoanMax: 150000,
       personalLoanMultiplier: 5,
@@ -436,7 +450,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       },
       creditCardLimitMultiplier: 2
     },
-    
+
     requirements: {
       minAge: 21,
       maxAge: 60,
@@ -445,12 +459,13 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       requiresEPF: true,
       requiresBankStatement: true
     },
-    
+
     specialFeatures: [
       '对自雇最严格（60%打折）',
       'DSR整体最严（55-60%）',
       '不太接受PR和外国人',
-      '较传统的审批'
+      '较传统的审批',
+      'SME贷款较严格（60-65% DSR）'
     ]
   },
 
@@ -458,7 +473,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
   {
     bankName: 'Hong Leong Bank',
     bankCode: 'HLB',
-    
+
     dsr: {
       personal: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
@@ -475,9 +490,13 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       credit_card: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
         { minNetIncome: 3000, dsrLimit: 80 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 70, notes: '较宽松' },
+        { minNetIncome: 5000, dsrLimit: 80, notes: '高收入最宽松' }
       ]
     },
-    
+
     incomeRecognition: {
       salaried: {
         employmentType: 'salaried',
@@ -505,7 +524,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         notes: '较友好'
       }
     },
-    
+
     identityConditions: [
       {
         identity: 'malaysian_citizen',
@@ -527,7 +546,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         specialNotes: '接受（90%认可，最宽松）'
       }
     ],
-    
+
     loanLimits: {
       personalLoanMax: 250000,
       personalLoanMultiplier: 7,
@@ -542,7 +561,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       },
       creditCardLimitMultiplier: 2.5
     },
-    
+
     requirements: {
       minAge: 21,
       maxAge: 60,
@@ -551,13 +570,14 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       requiresEPF: true,
       requiresBankStatement: true
     },
-    
+
     specialFeatures: [
       '对自雇最宽松（90%认可）',
       'DSR最宽松（80%高收入）',
       '联名房贷50%拆分优势',
       '愿意接受各类身份',
-      '最有可能通过的银行'
+      '最有可能通过的银行',
+      'SME贷款较宽松（70-80% DSR）'
     ]
   },
 
@@ -565,7 +585,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
   {
     bankName: 'Public Bank',
     bankCode: 'PBB',
-    
+
     dsr: {
       personal: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
@@ -582,9 +602,13 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       credit_card: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
         { minNetIncome: 3000, dsrLimit: 70 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 65, notes: '标准' },
+        { minNetIncome: 5000, dsrLimit: 75, notes: '高收入' }
       ]
     },
-    
+
     incomeRecognition: {
       salaried: {
         employmentType: 'salaried',
@@ -612,7 +636,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         notes: '中等'
       }
     },
-    
+
     identityConditions: [
       {
         identity: 'malaysian_citizen',
@@ -634,7 +658,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         specialNotes: '中等条件'
       }
     ],
-    
+
     loanLimits: {
       personalLoanMax: 150000,
       personalLoanMultiplier: 8,
@@ -649,7 +673,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       },
       creditCardLimitMultiplier: 2
     },
-    
+
     requirements: {
       minAge: 21,
       maxAge: 60,
@@ -664,7 +688,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
   {
     bankName: 'HSBC Malaysia',
     bankCode: 'HSBC',
-    
+
     dsr: {
       personal: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
@@ -681,9 +705,13 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       credit_card: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
         { minNetIncome: 3000, dsrLimit: 70 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 65, notes: '标准' },
+        { minNetIncome: 5000, dsrLimit: 75, notes: '高收入' }
       ]
     },
-    
+
     incomeRecognition: {
       salaried: {
         employmentType: 'salaried',
@@ -711,7 +739,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         notes: '需验证'
       }
     },
-    
+
     identityConditions: [
       {
         identity: 'malaysian_citizen',
@@ -735,7 +763,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         specialNotes: '专业人士优惠'
       }
     ],
-    
+
     loanLimits: {
       personalLoanMax: 200000,
       personalLoanMultiplier: 6,
@@ -750,7 +778,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       },
       creditCardLimitMultiplier: 2
     },
-    
+
     requirements: {
       minAge: 21,
       maxAge: 60,
@@ -759,7 +787,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       requiresEPF: false,
       requiresBankStatement: true
     },
-    
+
     specialFeatures: [
       '国际银行标准',
       '对PR和外国人友好',
@@ -772,7 +800,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
   {
     bankName: 'Bank Simpanan Nasional',
     bankCode: 'BSN',
-    
+
     dsr: {
       personal: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
@@ -789,9 +817,13 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       credit_card: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
         { minNetIncome: 3000, dsrLimit: 75 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 65, notes: '标准' },
+        { minNetIncome: 5000, dsrLimit: 75, notes: '高收入' }
       ]
     },
-    
+
     incomeRecognition: {
       salaried: {
         employmentType: 'salaried',
@@ -819,7 +851,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         notes: '标准'
       }
     },
-    
+
     identityConditions: [
       {
         identity: 'malaysian_citizen',
@@ -843,7 +875,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         specialNotes: '一般不接受'
       }
     ],
-    
+
     loanLimits: {
       personalLoanMax: 150000,
       personalLoanMultiplier: 6,
@@ -858,7 +890,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       },
       creditCardLimitMultiplier: 2
     },
-    
+
     requirements: {
       minAge: 21,
       maxAge: 60,
@@ -867,7 +899,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       requiresEPF: true,
       requiresBankStatement: true
     },
-    
+
     specialFeatures: [
       '政府银行',
       '政府员工优惠',
@@ -879,7 +911,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
   {
     bankName: 'Bank Islam Malaysia',
     bankCode: 'BIMB',
-    
+
     dsr: {
       personal: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 50 },
@@ -896,9 +928,13 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       credit_card: [
         { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 50 },
         { minNetIncome: 3000, dsrLimit: 70 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 60, notes: '较严格' },
+        { minNetIncome: 5000, dsrLimit: 70, notes: '高收入' }
       ]
     },
-    
+
     incomeRecognition: {
       salaried: {
         employmentType: 'salaried',
@@ -926,7 +962,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         notes: '较严'
       }
     },
-    
+
     identityConditions: [
       {
         identity: 'malaysian_citizen',
@@ -954,7 +990,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
         specialNotes: '困难（70%打折）'
       }
     ],
-    
+
     loanLimits: {
       personalLoanMax: 150000,
       personalLoanMultiplier: 6,
@@ -969,7 +1005,7 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       },
       creditCardLimitMultiplier: 2
     },
-    
+
     requirements: {
       minAge: 21,
       maxAge: 60,
@@ -978,12 +1014,776 @@ export const bankStandardsReal2025: BankStandardReal[] = [
       requiresEPF: true,
       requiresBankStatement: true
     },
-    
+
     specialFeatures: [
       '伊斯兰银行',
       '偏好马来西亚人和穆斯林',
       'DSR相对严格（50-70%）',
-      'Shariah产品'
+      'Shariah产品',
+      'SME贷款较严格（60-70% DSR）'
+    ]
+  },
+
+  // ===== Standard Chartered Bank =====
+  {
+    bankName: 'Standard Chartered Bank',
+    bankCode: 'SCB',
+
+    dsr: {
+      personal: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60, notes: '低收入严格' },
+        { minNetIncome: 3000, dsrLimit: 70, notes: '高收入' }
+      ],
+      housing: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 70 }
+      ],
+      car: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 70 }
+      ],
+      credit_card: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 70 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 65, notes: '中小企业较宽松' },
+        { minNetIncome: 5000, dsrLimit: 75, notes: '大型企业' }
+      ]
+    },
+
+    incomeRecognition: {
+      salaried: {
+        employmentType: 'salaried',
+        recognitionRate: 1.0,
+        requiredDocuments: ['最近3个月工资单', 'EPF单据', '银行账单'],
+        notes: '标准认可100%'
+      },
+      government: {
+        employmentType: 'government',
+        recognitionRate: 1.0,
+        requiredDocuments: ['工资单', 'EPF单据'],
+        notes: '标准认可'
+      },
+      self_employed: {
+        employmentType: 'self_employed',
+        recognitionRate: 0.75,
+        minBusinessYears: 3,
+        requiredDocuments: ['过去2年报税单', '12个月银行流水', 'SSM证书'],
+        notes: '取2年平均×75%，中等保守'
+      },
+      contract: {
+        employmentType: 'contract',
+        recognitionRate: 0.75,
+        requiredDocuments: ['合约书', '最近6个月工资单', '雇主信'],
+        notes: '需合约至少12个月有效期'
+      }
+    },
+
+    identityConditions: [
+      {
+        identity: 'malaysian_citizen',
+        accepted: true
+      },
+      {
+        identity: 'permanent_resident',
+        accepted: true,
+        additionalDocuments: ['PR证书'],
+        specialNotes: '接受，需额外文件'
+      },
+      {
+        identity: 'foreigner',
+        accepted: true,
+        interestRatePremium: 1.0,
+        dsrAdjustment: -10,
+        specialNotes: '接受但条件严格，需工作3+年，大公司'
+      }
+    ],
+
+    loanLimits: {
+      personalLoanMax: 200000,
+      personalLoanMultiplier: 12,
+      housingLTV: {
+        firstProperty: 90,
+        secondProperty: 80,
+        thirdProperty: 70
+      },
+      carLTV: {
+        newCar: 90,
+        usedCar: 75
+      },
+      creditCardLimitMultiplier: 2.5
+    },
+
+    requirements: {
+      minAge: 21,
+      maxAge: 65,
+      minEmploymentMonths: 6,
+      requiresPayslip: true,
+      requiresEPF: true,
+      requiresBankStatement: true
+    },
+
+    specialFeatures: [
+      '国际银行，服务较好',
+      '对自雇中等保守（75%）',
+      '接受外国人但条件严格',
+      'SME贷款较宽松（65-75% DSR）'
+    ]
+  },
+
+  // ===== UOB =====
+  {
+    bankName: 'United Overseas Bank',
+    bankCode: 'UOB',
+
+    dsr: {
+      personal: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60, notes: '低收入标准' },
+        { minNetIncome: 3000, dsrLimit: 75, notes: '高收入较宽松' }
+      ],
+      housing: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 75 }
+      ],
+      car: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 75 }
+      ],
+      credit_card: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 75 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 70, notes: '对SME较宽松' },
+        { minNetIncome: 5000, dsrLimit: 80, notes: '大型企业' }
+      ]
+    },
+
+    incomeRecognition: {
+      salaried: {
+        employmentType: 'salaried',
+        recognitionRate: 1.0,
+        requiredDocuments: ['最近3个月工资单', 'EPF单据', '银行账单'],
+        notes: '标准认可100%'
+      },
+      government: {
+        employmentType: 'government',
+        recognitionRate: 1.0,
+        requiredDocuments: ['工资单', 'EPF单据'],
+        notes: '标准认可'
+      },
+      self_employed: {
+        employmentType: 'self_employed',
+        recognitionRate: 0.8,
+        minBusinessYears: 2,
+        requiredDocuments: ['过去2年报税单', '12个月银行流水', 'SSM证书'],
+        notes: '取2年平均×80%，较宽松'
+      },
+      contract: {
+        employmentType: 'contract',
+        recognitionRate: 0.8,
+        requiredDocuments: ['合约书', '最近6个月工资单', '雇主信'],
+        notes: '较友好'
+      }
+    },
+
+    identityConditions: [
+      {
+        identity: 'malaysian_citizen',
+        accepted: true
+      },
+      {
+        identity: 'permanent_resident',
+        accepted: true,
+        additionalDocuments: ['PR证书'],
+        specialNotes: '接受，新加坡银行对PR友好'
+      },
+      {
+        identity: 'foreigner',
+        accepted: true,
+        interestRatePremium: 0.5,
+        dsrAdjustment: -5,
+        specialNotes: '外国人可能接受，需工作2+年'
+      }
+    ],
+
+    loanLimits: {
+      personalLoanMax: 200000,
+      personalLoanMultiplier: 12,
+      housingLTV: {
+        firstProperty: 90,
+        secondProperty: 80,
+        thirdProperty: 70
+      },
+      carLTV: {
+        newCar: 90,
+        usedCar: 75
+      },
+      creditCardLimitMultiplier: 2.5
+    },
+
+    requirements: {
+      minAge: 21,
+      maxAge: 65,
+      minEmploymentMonths: 6,
+      requiresPayslip: true,
+      requiresEPF: true,
+      requiresBankStatement: true
+    },
+
+    specialFeatures: [
+      '新加坡银行，中等严格',
+      '对自雇较宽松（80%认可）',
+      '接受PR和某些外国人',
+      'SME贷款较宽松（70-80% DSR）',
+      '个人贷款利率3.99%起'
+    ]
+  },
+
+  // ===== AmBank =====
+  {
+    bankName: 'AmBank',
+    bankCode: 'AMB',
+
+    dsr: {
+      personal: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60, notes: '标准' },
+        { minNetIncome: 3000, dsrLimit: 70, notes: '高收入' }
+      ],
+      housing: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 70 }
+      ],
+      car: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 70 }
+      ],
+      credit_card: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 70 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 65, notes: '标准' },
+        { minNetIncome: 5000, dsrLimit: 75, notes: '高收入' }
+      ]
+    },
+
+    incomeRecognition: {
+      salaried: {
+        employmentType: 'salaried',
+        recognitionRate: 1.0,
+        requiredDocuments: ['最近3个月工资单', 'EPF单据', '银行账单'],
+        notes: '标准认可100%'
+      },
+      government: {
+        employmentType: 'government',
+        recognitionRate: 1.0,
+        requiredDocuments: ['工资单', 'EPF单据'],
+        notes: '标准认可'
+      },
+      self_employed: {
+        employmentType: 'self_employed',
+        recognitionRate: 0.75,
+        minBusinessYears: 3,
+        requiredDocuments: ['过去2年报税单', '12个月银行流水', 'SSM证书'],
+        notes: '取2年平均×75%，标准政策'
+      },
+      contract: {
+        employmentType: 'contract',
+        recognitionRate: 0.75,
+        requiredDocuments: ['合约书', '最近6个月工资单', '雇主信'],
+        notes: '标准'
+      }
+    },
+
+    identityConditions: [
+      {
+        identity: 'malaysian_citizen',
+        accepted: true
+      },
+      {
+        identity: 'permanent_resident',
+        accepted: true,
+        additionalDocuments: ['PR证书'],
+        specialNotes: '接受，标准流程'
+      },
+      {
+        identity: 'foreigner',
+        accepted: false,
+        specialNotes: '较少接受'
+      }
+    ],
+
+    loanLimits: {
+      personalLoanMax: 300000,
+      personalLoanMultiplier: 10,
+      housingLTV: {
+        firstProperty: 90,
+        secondProperty: 85,
+        thirdProperty: 70
+      },
+      carLTV: {
+        newCar: 90,
+        usedCar: 75
+      },
+      creditCardLimitMultiplier: 2.5
+    },
+
+    requirements: {
+      minAge: 21,
+      maxAge: 60,
+      minEmploymentMonths: 6,
+      requiresPayslip: true,
+      requiresEPF: true,
+      requiresBankStatement: true
+    },
+
+    specialFeatures: [
+      '本地大型银行',
+      '标准政策',
+      '个人贷款利率4.38%-19.88%',
+      '对自雇标准（75%认可）',
+      'SME贷款标准（65-75% DSR）'
+    ]
+  },
+
+  // ===== MBSB =====
+  {
+    bankName: 'Malaysia Building Society Berhad',
+    bankCode: 'MBSB',
+
+    dsr: {
+      personal: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 65, notes: '较宽松' },
+        { minNetIncome: 3000, dsrLimit: 75, notes: '高收入宽松' }
+      ],
+      housing: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 65 },
+        { minNetIncome: 3000, dsrLimit: 75 }
+      ],
+      car: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 65 },
+        { minNetIncome: 3000, dsrLimit: 75 }
+      ],
+      credit_card: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 65 },
+        { minNetIncome: 3000, dsrLimit: 75 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 70, notes: '较宽松' },
+        { minNetIncome: 5000, dsrLimit: 80, notes: '大型企业' }
+      ]
+    },
+
+    incomeRecognition: {
+      salaried: {
+        employmentType: 'salaried',
+        recognitionRate: 1.0,
+        requiredDocuments: ['最近3个月工资单', 'EPF单据', '银行账单'],
+        notes: '标准认可100%'
+      },
+      government: {
+        employmentType: 'government',
+        recognitionRate: 1.0,
+        requiredDocuments: ['工资单', 'EPF单据'],
+        notes: '标准认可'
+      },
+      self_employed: {
+        employmentType: 'self_employed',
+        recognitionRate: 0.8,
+        minBusinessYears: 2,
+        requiredDocuments: ['过去2年报税单', '12个月银行流水', 'SSM证书'],
+        notes: '取2年平均×80%，较宽松'
+      },
+      contract: {
+        employmentType: 'contract',
+        recognitionRate: 0.8,
+        requiredDocuments: ['合约书', '最近6个月工资单', '雇主信'],
+        notes: '较友好'
+      }
+    },
+
+    identityConditions: [
+      {
+        identity: 'malaysian_citizen',
+        accepted: true
+      },
+      {
+        identity: 'permanent_resident',
+        accepted: true,
+        additionalDocuments: ['PR证书'],
+        specialNotes: '接受'
+      },
+      {
+        identity: 'foreigner',
+        accepted: false,
+        specialNotes: '较少接受'
+      }
+    ],
+
+    loanLimits: {
+      personalLoanMax: 200000,
+      personalLoanMultiplier: 10,
+      housingLTV: {
+        firstProperty: 90,
+        secondProperty: 85,
+        thirdProperty: 70
+      },
+      carLTV: {
+        newCar: 90,
+        usedCar: 80
+      },
+      creditCardLimitMultiplier: 2.5
+    },
+
+    requirements: {
+      minAge: 21,
+      maxAge: 65,
+      minEmploymentMonths: 6,
+      requiresPayslip: true,
+      requiresEPF: true,
+      requiresBankStatement: true
+    },
+
+    specialFeatures: [
+      '建筑储蓄银行，较宽松政策',
+      '对自雇较宽松（80%认可）',
+      '个人融资利率SBR+最高15%（浮动）',
+      'DSR较宽松（65-75%）',
+      'SME贷款较宽松（70-80% DSR）'
+    ]
+  },
+
+  // ===== OCBC =====
+  {
+    bankName: 'Oversea-Chinese Banking Corporation',
+    bankCode: 'OCBC',
+
+    dsr: {
+      personal: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60, notes: '标准' },
+        { minNetIncome: 3000, dsrLimit: 75, notes: '高收入较宽松' }
+      ],
+      housing: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 75 }
+      ],
+      car: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 75 }
+      ],
+      credit_card: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 75 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 70, notes: '对SME较宽松' },
+        { minNetIncome: 5000, dsrLimit: 80, notes: '大型企业' }
+      ]
+    },
+
+    incomeRecognition: {
+      salaried: {
+        employmentType: 'salaried',
+        recognitionRate: 1.0,
+        requiredDocuments: ['最近3个月工资单', 'EPF单据', '银行账单'],
+        notes: '标准认可100%'
+      },
+      government: {
+        employmentType: 'government',
+        recognitionRate: 1.0,
+        requiredDocuments: ['工资单', 'EPF单据'],
+        notes: '标准认可'
+      },
+      self_employed: {
+        employmentType: 'self_employed',
+        recognitionRate: 0.8,
+        minBusinessYears: 2,
+        requiredDocuments: ['过去2年报税单', '12个月银行流水', 'SSM证书'],
+        notes: '取2年平均×80%，较宽松'
+      },
+      contract: {
+        employmentType: 'contract',
+        recognitionRate: 0.8,
+        requiredDocuments: ['合约书', '最近6个月工资单', '雇主信'],
+        notes: '较友好'
+      }
+    },
+
+    identityConditions: [
+      {
+        identity: 'malaysian_citizen',
+        accepted: true
+      },
+      {
+        identity: 'permanent_resident',
+        accepted: true,
+        additionalDocuments: ['PR证书'],
+        specialNotes: '接受，新加坡银行对PR友好'
+      },
+      {
+        identity: 'foreigner',
+        accepted: true,
+        interestRatePremium: 0.5,
+        dsrAdjustment: -5,
+        specialNotes: '外国人可能接受，需工作2+年'
+      }
+    ],
+
+    loanLimits: {
+      personalLoanMax: 200000,
+      personalLoanMultiplier: 12,
+      housingLTV: {
+        firstProperty: 90,
+        secondProperty: 80,
+        thirdProperty: 70
+      },
+      carLTV: {
+        newCar: 90,
+        usedCar: 75
+      },
+      creditCardLimitMultiplier: 2.5
+    },
+
+    requirements: {
+      minAge: 21,
+      maxAge: 65,
+      minEmploymentMonths: 6,
+      requiresPayslip: true,
+      requiresEPF: true,
+      requiresBankStatement: true
+    },
+
+    specialFeatures: [
+      '新加坡银行，中等严格',
+      '对自雇较宽松（80%认可）',
+      '接受PR和某些外国人',
+      'SME贷款较宽松（70-80% DSR）',
+      '与UOB类似政策'
+    ]
+  },
+
+  // ===== Alliance Bank =====
+  {
+    bankName: 'Alliance Bank Malaysia Berhad',
+    bankCode: 'ALLIANCE',
+
+    dsr: {
+      personal: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60, notes: '标准' },
+        { minNetIncome: 3000, dsrLimit: 70, notes: '高收入' }
+      ],
+      housing: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 70 }
+      ],
+      car: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 70 }
+      ],
+      credit_card: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 60 },
+        { minNetIncome: 3000, dsrLimit: 70 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 65, notes: '标准' },
+        { minNetIncome: 5000, dsrLimit: 75, notes: '高收入' }
+      ]
+    },
+
+    incomeRecognition: {
+      salaried: {
+        employmentType: 'salaried',
+        recognitionRate: 1.0,
+        requiredDocuments: ['最近3个月工资单', 'EPF单据', '银行账单'],
+        notes: '标准认可100%'
+      },
+      government: {
+        employmentType: 'government',
+        recognitionRate: 1.0,
+        requiredDocuments: ['工资单', 'EPF单据'],
+        notes: '标准认可'
+      },
+      self_employed: {
+        employmentType: 'self_employed',
+        recognitionRate: 0.75,
+        minBusinessYears: 3,
+        requiredDocuments: ['过去2年报税单', '12个月银行流水', 'SSM证书'],
+        notes: '取2年平均×75%，标准政策'
+      },
+      contract: {
+        employmentType: 'contract',
+        recognitionRate: 0.75,
+        requiredDocuments: ['合约书', '最近6个月工资单', '雇主信'],
+        notes: '标准'
+      }
+    },
+
+    identityConditions: [
+      {
+        identity: 'malaysian_citizen',
+        accepted: true
+      },
+      {
+        identity: 'permanent_resident',
+        accepted: true,
+        additionalDocuments: ['PR证书'],
+        specialNotes: '接受，标准流程'
+      },
+      {
+        identity: 'foreigner',
+        accepted: false,
+        specialNotes: '较少接受'
+      }
+    ],
+
+    loanLimits: {
+      personalLoanMax: 200000,
+      personalLoanMultiplier: 10,
+      housingLTV: {
+        firstProperty: 90,
+        secondProperty: 85,
+        thirdProperty: 70
+      },
+      carLTV: {
+        newCar: 90,
+        usedCar: 75
+      },
+      creditCardLimitMultiplier: 2.5
+    },
+
+    requirements: {
+      minAge: 21,
+      maxAge: 60,
+      minEmploymentMonths: 6,
+      requiresPayslip: true,
+      requiresEPF: true,
+      requiresBankStatement: true
+    },
+
+    specialFeatures: [
+      '本地银行，中等严格',
+      '标准政策',
+      '数字个人贷款平利率4.99%起',
+      '最低收入要求RM 3,000',
+      '对自雇标准（75%认可）',
+      'SME贷款标准（65-75% DSR）'
+    ]
+  },
+
+  // ===== Bank Rakyat =====
+  {
+    bankName: 'Bank Kerjasama Rakyat Malaysia Berhad',
+    bankCode: 'BANK RAKYAT',
+
+    dsr: {
+      personal: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 65, notes: '较宽松' },
+        { minNetIncome: 3000, dsrLimit: 80, notes: '高收入最宽松' }
+      ],
+      housing: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 65 },
+        { minNetIncome: 3000, dsrLimit: 80 }
+      ],
+      car: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 65 },
+        { minNetIncome: 3000, dsrLimit: 80 }
+      ],
+      credit_card: [
+        { minNetIncome: 0, maxNetIncome: 3000, dsrLimit: 65 },
+        { minNetIncome: 3000, dsrLimit: 80 }
+      ],
+      sme_loan: [
+        { minNetIncome: 0, maxNetIncome: 5000, dsrLimit: 70, notes: '较宽松' },
+        { minNetIncome: 5000, dsrLimit: 85, notes: '大型企业最宽松' }
+      ]
+    },
+
+    incomeRecognition: {
+      salaried: {
+        employmentType: 'salaried',
+        recognitionRate: 1.0,
+        requiredDocuments: ['最近3个月工资单', 'EPF单据', '银行账单'],
+        notes: '标准认可100%'
+      },
+      government: {
+        employmentType: 'government',
+        recognitionRate: 1.0,
+        requiredDocuments: ['工资单', 'EPF单据'],
+        notes: '公共部门优先，更优惠'
+      },
+      self_employed: {
+        employmentType: 'self_employed',
+        recognitionRate: 0.85,
+        minBusinessYears: 2,
+        requiredDocuments: ['过去2年报税单', '12个月银行流水', 'SSM证书'],
+        notes: '取2年平均×85%，最宽松'
+      },
+      contract: {
+        employmentType: 'contract',
+        recognitionRate: 0.85,
+        requiredDocuments: ['合约书', '最近6个月工资单', '雇主信'],
+        notes: '较友好'
+      }
+    },
+
+    identityConditions: [
+      {
+        identity: 'malaysian_citizen',
+        accepted: true,
+        specialNotes: '优先，合作银行优势'
+      },
+      {
+        identity: 'government_employee',
+        accepted: true,
+        dsrAdjustment: 5,
+        specialNotes: '公共部门员工优惠，扣薪方式更优惠利率'
+      },
+      {
+        identity: 'permanent_resident',
+        accepted: true,
+        additionalDocuments: ['PR证书'],
+        specialNotes: '接受'
+      },
+      {
+        identity: 'foreigner',
+        accepted: false,
+        specialNotes: '较少接受'
+      }
+    ],
+
+    loanLimits: {
+      personalLoanMax: 200000,
+      personalLoanMultiplier: 10,
+      housingLTV: {
+        firstProperty: 90,
+        secondProperty: 85,
+        thirdProperty: 70
+      },
+      carLTV: {
+        newCar: 90,
+        usedCar: 80
+      },
+      creditCardLimitMultiplier: 2.5
+    },
+
+    requirements: {
+      minAge: 21,
+      maxAge: 65,
+      minEmploymentMonths: 6,
+      requiresPayslip: true,
+      requiresEPF: true,
+      requiresBankStatement: true
+    },
+
+    specialFeatures: [
+      '合作银行，对公共部门优惠',
+      '对自雇最宽松（85%认可）',
+      '个人融资-i利率3.42%-5.22%',
+      '公共部门扣薪方式更优惠利率',
+      'DSR最宽松（65-80%）',
+      'SME贷款最宽松（70-85% DSR）'
     ]
   }
 ];
@@ -1012,12 +1812,12 @@ export function getDSRLimit(
 
   const limits = bank.dsr[loanType];
   for (const limit of limits) {
-    if (netIncome >= limit.minNetIncome && 
+    if (netIncome >= limit.minNetIncome &&
         (limit.maxNetIncome === undefined || netIncome < limit.maxNetIncome)) {
       return limit.dsrLimit;
     }
   }
-  
+
   // 返回最后一个限制（通常是最高收入的限制）
   return limits[limits.length - 1].dsrLimit;
 }
@@ -1041,7 +1841,7 @@ export function calculateRecognizedIncome(
   }
 
   const rule = bank.incomeRecognition[employmentType];
-  
+
   // 检查自雇年限
   if (employmentType === 'self_employed') {
     if (!businessYears || businessYears < (rule.minBusinessYears || 2)) {
@@ -1054,7 +1854,7 @@ export function calculateRecognizedIncome(
   }
 
   const recognizedIncome = grossIncome * rule.recognitionRate;
-  
+
   return {
     recognizedIncome,
     recognitionRate: rule.recognitionRate,
@@ -1079,7 +1879,7 @@ export function checkIdentityEligibility(
   }
 
   const condition = bank.identityConditions.find(ic => ic.identity === identity);
-  
+
   if (!condition) {
     return { accepted: true, message: '无特殊限制' };
   }

@@ -20,7 +20,7 @@ interface CalculationResult {
 
 export default function LoanCalculatorPage() {
   const { t } = useLanguage()
-  
+
   // Input states
   const [monthlyIncome, setMonthlyIncome] = useState(5000)
   const [existingCommit, setExistingCommit] = useState(0)
@@ -28,7 +28,7 @@ export default function LoanCalculatorPage() {
   const [proposedLoan, setProposedLoan] = useState(100000)
   const [loanRate, setLoanRate] = useState(5.0)
   const [loanTenure, setLoanTenure] = useState(20)
-  
+
   // Results state
   const [results, setResults] = useState<CalculationResult | null>(null)
   const [showResults, setShowResults] = useState(false)
@@ -43,11 +43,11 @@ export default function LoanCalculatorPage() {
   ): CalculationResult => {
     // 1. Current DSR (before new loan)
     const currentDSR = (existingCommit / income) * 100
-    
+
     // 2. New loan monthly payment (using standard amortization formula)
     const monthlyRate = loanRate / 100 / 12
     const numMonths = loanTenure * 12
-    
+
     let newLoanMonthlyPayment = 0
     if (monthlyRate === 0) {
       newLoanMonthlyPayment = proposedLoan / numMonths
@@ -56,17 +56,17 @@ export default function LoanCalculatorPage() {
       const denominator = Math.pow(1 + monthlyRate, numMonths) - 1
       newLoanMonthlyPayment = proposedLoan * (numerator / denominator)
     }
-    
+
     // 3. Total monthly commitment after new loan
     const totalNewCommitment = existingCommit + newLoanMonthlyPayment
-    
+
     // 4. New DSR (after new loan)
     const newDSR = (totalNewCommitment / income) * 100
-    
+
     // 5. Total interest paid over loan tenure
     const totalPaid = newLoanMonthlyPayment * numMonths
     const totalInterest = totalPaid - proposedLoan
-    
+
     // 6. Affordability classification
     let affordabilityStatus: 'comfortable' | 'manageable' | 'tight' | 'highRisk' | 'critical'
     if (newDSR <= 40) {
@@ -80,7 +80,7 @@ export default function LoanCalculatorPage() {
     } else {
       affordabilityStatus = 'critical'
     }
-    
+
     return {
       currentDSR,
       newLoanMonthlyPayment,
@@ -131,7 +131,7 @@ export default function LoanCalculatorPage() {
 
   const handleCalculate = (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (monthlyIncome <= 0) {
       alert(t.loanCalculator.input.monthlyIncome.help)
       return
@@ -149,10 +149,10 @@ export default function LoanCalculatorPage() {
       loanRate,
       loanTenure
     )
-    
+
     setResults(calculationResults)
     setShowResults(true)
-    
+
     // Scroll to results
     setTimeout(() => {
       const resultsElement = document.getElementById('results-section')
@@ -177,13 +177,13 @@ export default function LoanCalculatorPage() {
     <div className="min-h-screen bg-black text-foreground">
       <ScrollProgress />
       <Header />
-      
+
       <main className="pt-20 pb-32">
         <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl">
           {/* Back Button */}
           <div className="mb-8">
-            <Link 
-              href="/tools" 
+            <Link
+              href="/tools"
               className="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors font-mono text-sm uppercase tracking-widest"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -199,10 +199,11 @@ export default function LoanCalculatorPage() {
             <p className="text-secondary mx-auto max-w-3xl text-lg md:text-xl leading-relaxed mb-6">
               {t.loanCalculator.header.subtitle}
             </p>
-            
+
             {/* Important Notice Box */}
-            <div className="max-w-4xl mx-auto p-6 bg-yellow-900/20 border border-yellow-800/50 rounded-xl">
-              <p className="text-yellow-200 text-sm leading-relaxed">
+            <div className="max-w-4xl mx-auto flex gap-4 p-6 bg-black border border-zinc-800 rounded-xl">
+              <AlertCircle className="w-5 h-5 text-secondary flex-shrink-0 mt-0.5" />
+              <p className="text-secondary text-sm leading-relaxed">
                 {t.loanCalculator.header.notice}
               </p>
             </div>
@@ -215,7 +216,7 @@ export default function LoanCalculatorPage() {
                 {/* Panel 1: Income & Commitments */}
                 <div className="space-y-6 pb-6 border-b border-zinc-800">
                   <h3 className="text-xl font-semibold text-primary mb-4 uppercase tracking-widest font-mono text-sm">Income & Commitments</h3>
-                  
+
                   {/* Monthly Gross Income */}
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono">
@@ -283,7 +284,7 @@ export default function LoanCalculatorPage() {
                 {/* Panel 2: Loan Details */}
                 <div className="space-y-6 pt-6">
                   <h3 className="text-xl font-semibold text-primary mb-4 uppercase tracking-widest font-mono text-sm">Proposed Loan Details</h3>
-                  
+
                   {/* Proposed Loan Amount */}
                   <div>
                     <label className="block text-sm font-medium mb-2 text-primary uppercase tracking-widest font-mono">

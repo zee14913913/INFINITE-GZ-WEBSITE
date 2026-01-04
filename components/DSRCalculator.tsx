@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Calculator, 
-  TrendingUp, 
-  AlertCircle, 
-  CheckCircle, 
+import {
+  Calculator,
+  TrendingUp,
+  AlertCircle,
+  CheckCircle,
   XCircle,
   Download,
   BarChart3,
@@ -13,8 +13,21 @@ import {
   Clock,
   DollarSign,
   Sparkles,
-  Shield
+  Shield,
+  ChevronDown,
+  ChevronUp,
+  Upload
 } from 'lucide-react';
+import {
+  bankStandardsReal2025,
+  getDSRLimit,
+  calculateRecognizedIncome,
+  checkIdentityEligibility,
+  type LoanType,
+  type ApplicantIdentity,
+  type EmploymentType
+} from '@/lib/bankStandardsReal2025';
+import { calculateDiminishingRateMonthlyPayment } from '@/lib/dsrCalculator';
 
 // 身份类型
 const IDENTITY_TYPES = [
@@ -42,17 +55,40 @@ const LOAN_TYPES = [
   { value: 'business', label: 'Business Loan', labelZh: '营运资金', labelMs: 'Pinjaman Perniagaan' },
 ];
 
-// 银行标准（简化版，完整版应该从 bankStandardsReal2025.ts 导入）
-const BANK_STANDARDS = [
-  { code: 'MBB', name: 'Maybank', dsrLow: 40, dsrHigh: 70, selfEmployedRate: 0.7 },
-  { code: 'CIMB', name: 'CIMB', dsrLow: 65, dsrHigh: 75, selfEmployedRate: 0.8 },
-  { code: 'RHB', name: 'RHB', dsrLow: 55, dsrHigh: 60, selfEmployedRate: 0.6 },
-  { code: 'HLB', name: 'Hong Leong', dsrLow: 60, dsrHigh: 80, selfEmployedRate: 0.9 },
-  { code: 'PBB', name: 'Public Bank', dsrLow: 60, dsrHigh: 70, selfEmployedRate: 0.75 },
-  { code: 'HSBC', name: 'HSBC', dsrLow: 60, dsrHigh: 70, selfEmployedRate: 0.75 },
-  { code: 'BSN', name: 'BSN', dsrLow: 60, dsrHigh: 75, selfEmployedRate: 0.7 },
-  { code: 'BIMB', name: 'Bank Islam', dsrLow: 50, dsrHigh: 70, selfEmployedRate: 0.7 },
-];
+// 映射函数：将UI中的贷款类型映射到数据模型中的LoanType
+function mapLoanType(uiLoanType: string): LoanType {
+  switch (uiLoanType) {
+    case 'personal': return 'personal';
+    case 'housing': return 'housing';
+    case 'auto': return 'car';
+    case 'business': return 'sme_loan';
+    default: return 'personal';
+  }
+}
+
+// 映射函数：将UI中的身份类型映射到数据模型中的ApplicantIdentity
+function mapIdentityType(uiIdentityType: string): ApplicantIdentity {
+  switch (uiIdentityType) {
+    case 'citizen': return 'malaysian_citizen';
+    case 'pr': return 'permanent_resident';
+    case 'civil_servant': return 'government_employee';
+    case 'glc': return 'glc_employee';
+    case 'self_employed': return 'self_employed';
+    case 'foreigner': return 'foreigner';
+    default: return 'malaysian_citizen';
+  }
+}
+
+// 映射函数：将UI中的就业类型映射到数据模型中的EmploymentType
+function mapEmploymentType(uiEmploymentType: string): EmploymentType {
+  switch (uiEmploymentType) {
+    case 'salaried': return 'salaried';
+    case 'self_employed': return 'self_employed';
+    case 'government': return 'government';
+    case 'contract': return 'contract';
+    default: return 'salaried';
+  }
+}
 
 interface DSRCalculatorProps {
   language?: 'en' | 'zh' | 'ms';
@@ -64,27 +100,32 @@ export default function DSRCalculator({ language = 'en' }: DSRCalculatorProps) {
   const [identityType, setIdentityType] = useState('citizen');
   const [employmentType, setEmploymentType] = useState('salaried');
   const [businessYears, setBusinessYears] = useState(3);
-  
-  // 收入信息
+
+  // 收入信息（简化版：净月收入为主要字段）
+  const [netIncome, setNetIncome] = useState(5170); // 主要字段：净月收入
+
+  // 高级选项（可选，用于详细计算或显示）
+  const [showAdvancedIncome, setShowAdvancedIncome] = useState(false);
   const [grossSalary, setGrossSalary] = useState(6000);
   const [epfDeduction, setEpfDeduction] = useState(480);
   const [incomeTax, setIncomeTax] = useState(300);
   const [socso, setSocso] = useState(50);
-  const [netIncome, setNetIncome] = useState(5170);
-  
+
   // 现有债务
   const [housingLoan, setHousingLoan] = useState(0);
   const [autoLoan, setAutoLoan] = useState(0);
   const [personalLoan, setPersonalLoan] = useState(0);
   const [ptptn, setPtptn] = useState(0);
+  const [businessLoan, setBusinessLoan] = useState(0); // 新增：商业贷款
+  const [overdraft, setOverdraft] = useState(0); // 新增：透支额度
   const [creditCards, setCreditCards] = useState<Array<{ used: number; limit: number }>>([]);
-  
+
   // 贷款需求
   const [loanType, setLoanType] = useState('personal');
   const [loanAmount, setLoanAmount] = useState(100000);
   const [loanYears, setLoanYears] = useState(5);
   const [interestRate, setInterestRate] = useState(7);
-  
+
   // 计算结果
   const [totalCommitments, setTotalCommitments] = useState(0);
   const [newMonthlyPayment, setNewMonthlyPayment] = useState(0);
@@ -92,31 +133,42 @@ export default function DSRCalculator({ language = 'en' }: DSRCalculatorProps) {
   const [bankResults, setBankResults] = useState<any[]>([]);
   const [recommendations, setRecommendations] = useState<any[]>([]);
 
-  // 自动计算净收入
+  // 高级选项：自动计算净收入（如果用户使用高级选项）
   useEffect(() => {
-    const calculated = grossSalary - epfDeduction - incomeTax - socso;
-    setNetIncome(calculated);
-  }, [grossSalary, epfDeduction, incomeTax, socso]);
+    if (showAdvancedIncome && grossSalary > 0) {
+      const calculated = grossSalary - epfDeduction - incomeTax - socso;
+      setNetIncome(calculated);
+    }
+  }, [showAdvancedIncome, grossSalary, epfDeduction, incomeTax, socso]);
 
-  // 自动计算EPF（8%）
+  // 高级选项：自动计算EPF（8%）
   useEffect(() => {
-    setEpfDeduction(grossSalary * 0.08);
-  }, [grossSalary]);
+    if (showAdvancedIncome && grossSalary > 0) {
+      setEpfDeduction(grossSalary * 0.08);
+    }
+  }, [showAdvancedIncome, grossSalary]);
 
   // 计算总承诺
   useEffect(() => {
-    let total = housingLoan + autoLoan + personalLoan + ptptn;
+    let total = housingLoan + autoLoan + personalLoan + ptptn + businessLoan + overdraft;
     creditCards.forEach(card => {
       total += card.used * 0.05; // 5%规则
     });
     setTotalCommitments(total);
-  }, [housingLoan, autoLoan, personalLoan, ptptn, creditCards]);
+  }, [housingLoan, autoLoan, personalLoan, ptptn, businessLoan, overdraft, creditCards]);
 
-  // 计算新贷款月供（平息法简化）
+  // 计算新贷款月供（使用减余法/amortization公式）
   useEffect(() => {
-    const monthlyInterest = (loanAmount * interestRate * loanYears) / 100 / 12 / loanYears;
-    const monthlyPrincipal = loanAmount / (loanYears * 12);
-    setNewMonthlyPayment(monthlyPrincipal + monthlyInterest);
+    if (loanAmount > 0 && loanYears > 0 && interestRate >= 0) {
+      const result = calculateDiminishingRateMonthlyPayment(
+        loanAmount,
+        loanYears,
+        interestRate
+      );
+      setNewMonthlyPayment(result.monthlyPayment);
+    } else {
+      setNewMonthlyPayment(0);
+    }
   }, [loanAmount, loanYears, interestRate]);
 
   // 计算DSR
@@ -128,52 +180,119 @@ export default function DSRCalculator({ language = 'en' }: DSRCalculatorProps) {
     }
   }, [totalCommitments, newMonthlyPayment, netIncome]);
 
-  // 评估8家银行
+  // 评估所有银行（使用完整的银行标准数据）
   useEffect(() => {
-    const results = BANK_STANDARDS.map(bank => {
-      // 根据收入决定DSR限制
-      const dsrLimit = netIncome < 3000 ? bank.dsrLow : bank.dsrHigh;
-      
-      // 根据就业类型调整收入认定
-      let recognizedIncome = netIncome;
-      if (employmentType === 'self_employed') {
-        recognizedIncome = netIncome * bank.selfEmployedRate;
+    if (netIncome <= 0) {
+      setBankResults([]);
+      setRecommendations([]);
+      return;
+    }
+
+    // 映射类型
+    const mappedLoanType = mapLoanType(loanType);
+    const mappedIdentity = mapIdentityType(identityType);
+    const mappedEmploymentType = mapEmploymentType(employmentType);
+
+    const results = bankStandardsReal2025.map(bank => {
+      // 1. 检查身份资格
+      const eligibility = checkIdentityEligibility(bank.bankCode, mappedIdentity);
+      if (!eligibility.accepted) {
+        return {
+          code: bank.bankCode,
+          name: bank.bankName,
+          status: 'rejected',
+          statusColor: 'red',
+          reason: eligibility.message,
+          dsrLimit: 0,
+          recognizedIncome: 0,
+          adjustedDsr: 0,
+          margin: 0,
+        };
       }
-      
-      // 重新计算DSR
-      const adjustedDsr = netIncome > 0 ? ((totalCommitments + newMonthlyPayment) / recognizedIncome) * 100 : 0;
-      
-      // 评估状态
+
+      // 2. 计算认定收入（考虑就业类型和身份调整）
+      // 如果用户使用了高级选项，使用总薪资；否则使用净收入作为基础
+      const grossIncome = showAdvancedIncome && grossSalary > 0
+        ? grossSalary
+        : netIncome * 1.15; // 如果只输入净收入，估算总薪资（假设扣除约15%）
+
+      const incomeRecognition = calculateRecognizedIncome(
+        bank.bankCode,
+        grossIncome,
+        mappedEmploymentType,
+        businessYears
+      );
+
+      let recognizedIncome = incomeRecognition.recognizedIncome;
+      if (recognizedIncome <= 0) {
+        // 如果认定收入为0（例如自雇年限不足），使用净收入作为fallback
+        recognizedIncome = netIncome * 0.5; // 保守估计
+      }
+
+      // 3. 应用身份相关的DSR调整
+      let dsrAdjustment = 0;
+      if (eligibility.conditions?.dsrAdjustment) {
+        dsrAdjustment = eligibility.conditions.dsrAdjustment;
+      }
+
+      // 4. 获取DSR限制
+      const baseDsrLimit = getDSRLimit(bank.bankCode, mappedLoanType, recognizedIncome);
+      const adjustedDsrLimit = Math.max(0, baseDsrLimit + dsrAdjustment);
+
+      // 5. 计算调整后的DSR
+      const totalMonthlyCommitment = totalCommitments + newMonthlyPayment;
+      const adjustedDsr = recognizedIncome > 0
+        ? (totalMonthlyCommitment / recognizedIncome) * 100
+        : 100;
+
+      // 6. 评估状态
       let status = 'rejected';
       let statusColor = 'red';
-      if (adjustedDsr <= dsrLimit) {
+      if (adjustedDsr <= adjustedDsrLimit) {
         status = 'approved';
         statusColor = 'green';
-      } else if (adjustedDsr <= dsrLimit + 10) {
+      } else if (adjustedDsr <= adjustedDsrLimit + 10) {
         status = 'risky';
         statusColor = 'yellow';
       }
-      
+
       return {
-        ...bank,
-        dsrLimit,
-        recognizedIncome,
-        adjustedDsr,
+        code: bank.bankCode,
+        name: bank.bankName,
         status,
         statusColor,
-        margin: dsrLimit - adjustedDsr,
+        reason: eligibility.conditions?.specialNotes || '',
+        dsrLimit: adjustedDsrLimit,
+        recognizedIncome,
+        adjustedDsr,
+        margin: adjustedDsrLimit - adjustedDsr,
+        incomeRecognitionRate: incomeRecognition.recognitionRate,
       };
     });
-    
+
     setBankResults(results);
-    
+
     // 生成推荐（排序）
     const approved = results
       .filter(r => r.status === 'approved')
       .sort((a, b) => b.margin - a.margin);
-    
+
     setRecommendations(approved);
-  }, [dsr, netIncome, employmentType, totalCommitments, newMonthlyPayment]);
+  }, [
+    dsr,
+    netIncome,
+    employmentType,
+    identityType,
+    loanType,
+    businessYears,
+    totalCommitments,
+    newMonthlyPayment,
+    showAdvancedIncome,
+    grossSalary,
+    epfDeduction,
+    incomeTax,
+    socso
+  ]);
 
   // 添加信用卡
   const addCreditCard = () => {
@@ -236,7 +355,7 @@ export default function DSRCalculator({ language = 'en' }: DSRCalculatorProps) {
       {step === 1 && (
         <div className="space-y-6">
           <h2 className="text-2xl font-bold">Step 1: Identity & Employment</h2>
-          
+
           <div>
             <label className="block mb-2 font-medium">Identity Type</label>
             <select
@@ -289,54 +408,106 @@ export default function DSRCalculator({ language = 'en' }: DSRCalculatorProps) {
         </div>
       )}
 
-      {/* Step 2: 收入信息 */}
+      {/* Step 2: 收入信息（简化版） */}
       {step === 2 && (
         <div className="space-y-6">
           <h2 className="text-2xl font-bold">Step 2: Income Information</h2>
-          
+
+          {/* 主要字段：净月收入 */}
           <div>
-            <label className="block mb-2 font-medium">Gross Monthly Salary (RM)</label>
+            <label className="block mb-2 font-medium">
+              Net Monthly Income (RM) <span className="text-red-500">*</span>
+            </label>
             <input
               type="number"
-              value={grossSalary}
-              onChange={(e) => setGrossSalary(Number(e.target.value))}
+              value={netIncome}
+              onChange={(e) => setNetIncome(Number(e.target.value) || 0)}
               className="w-full p-3 rounded-lg bg-muted border border-border"
+              placeholder="Enter your net monthly income"
             />
+            <p className="mt-1 text-sm text-muted-foreground">
+              Enter your net monthly income after all deductions (EPF, tax, SOCSO, etc.)
+            </p>
           </div>
 
-          <div>
-            <label className="block mb-2 font-medium">EPF Deduction (8%) (RM)</label>
-            <input
-              type="number"
-              value={epfDeduction}
-              disabled
-              className="w-full p-3 rounded-lg bg-muted border border-border opacity-60"
-            />
+          {/* 高级选项（折叠） */}
+          <div className="border border-border rounded-lg">
+            <button
+              onClick={() => setShowAdvancedIncome(!showAdvancedIncome)}
+              className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition"
+            >
+              <span className="font-medium">Advanced Options (Optional)</span>
+              {showAdvancedIncome ? (
+                <ChevronUp className="w-5 h-5" />
+              ) : (
+                <ChevronDown className="w-5 h-5" />
+              )}
+            </button>
+
+            {showAdvancedIncome && (
+              <div className="p-4 space-y-4 border-t border-border">
+                <div>
+                  <label className="block mb-2 font-medium text-sm">Gross Monthly Salary (RM)</label>
+                  <input
+                    type="number"
+                    value={grossSalary}
+                    onChange={(e) => setGrossSalary(Number(e.target.value) || 0)}
+                    className="w-full p-3 rounded-lg bg-muted border border-border"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2 font-medium text-sm">EPF Deduction (8%) (RM)</label>
+                  <input
+                    type="number"
+                    value={epfDeduction}
+                    onChange={(e) => setEpfDeduction(Number(e.target.value) || 0)}
+                    className="w-full p-3 rounded-lg bg-muted border border-border"
+                  />
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Usually 8% of gross salary (auto-calculated if gross salary is entered)
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block mb-2 font-medium text-sm">Income Tax (RM)</label>
+                  <input
+                    type="number"
+                    value={incomeTax}
+                    onChange={(e) => setIncomeTax(Number(e.target.value) || 0)}
+                    className="w-full p-3 rounded-lg bg-muted border border-border"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2 font-medium text-sm">SOCSO (RM)</label>
+                  <input
+                    type="number"
+                    value={socso}
+                    onChange={(e) => setSocso(Number(e.target.value) || 0)}
+                    className="w-full p-3 rounded-lg bg-muted border border-border"
+                  />
+                </div>
+
+                <div className="p-3 rounded-lg bg-muted/50 border border-border">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Calculated Net Income:</span>
+                    <span className="font-semibold">
+                      RM {(grossSalary - epfDeduction - incomeTax - socso).toLocaleString()}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    This will update the Net Monthly Income above if all fields are filled
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
-          <div>
-            <label className="block mb-2 font-medium">Income Tax (RM)</label>
-            <input
-              type="number"
-              value={incomeTax}
-              onChange={(e) => setIncomeTax(Number(e.target.value))}
-              className="w-full p-3 rounded-lg bg-muted border border-border"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-2 font-medium">SOCSO (RM)</label>
-            <input
-              type="number"
-              value={socso}
-              onChange={(e) => setSocso(Number(e.target.value))}
-              className="w-full p-3 rounded-lg bg-muted border border-border"
-            />
-          </div>
-
+          {/* 净收入显示（始终显示） */}
           <div className="p-4 rounded-lg bg-primary/10 border border-primary">
             <div className="flex items-center justify-between">
-              <span className="font-bold">Net Income:</span>
+              <span className="font-bold">Net Monthly Income:</span>
               <span className="text-2xl font-bold text-primary">
                 RM {netIncome.toLocaleString()}
               </span>
@@ -364,7 +535,7 @@ export default function DSRCalculator({ language = 'en' }: DSRCalculatorProps) {
       {step === 3 && (
         <div className="space-y-6">
           <h2 className="text-2xl font-bold">Step 3: Existing Debts</h2>
-          
+
           <div>
             <label className="block mb-2 font-medium">Housing Loan (RM/month)</label>
             <input
@@ -401,6 +572,26 @@ export default function DSRCalculator({ language = 'en' }: DSRCalculatorProps) {
               type="number"
               value={ptptn}
               onChange={(e) => setPtptn(Number(e.target.value))}
+              className="w-full p-3 rounded-lg bg-muted border border-border"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium">Business Loan (RM/month)</label>
+            <input
+              type="number"
+              value={businessLoan}
+              onChange={(e) => setBusinessLoan(Number(e.target.value) || 0)}
+              className="w-full p-3 rounded-lg bg-muted border border-border"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium">Overdraft (RM/month)</label>
+            <input
+              type="number"
+              value={overdraft}
+              onChange={(e) => setOverdraft(Number(e.target.value) || 0)}
               className="w-full p-3 rounded-lg bg-muted border border-border"
             />
           </div>
@@ -485,7 +676,7 @@ export default function DSRCalculator({ language = 'en' }: DSRCalculatorProps) {
       {step === 4 && (
         <div className="space-y-6">
           <h2 className="text-2xl font-bold">Step 4: Loan Requirement</h2>
-          
+
           <div>
             <label className="block mb-2 font-medium">Loan Type</label>
             <select
@@ -549,7 +740,7 @@ export default function DSRCalculator({ language = 'en' }: DSRCalculatorProps) {
               <Calculator className="w-8 h-8" />
               Your DSR Analysis
             </h3>
-            
+
             <div className="grid grid-cols-3 gap-4 mb-6">
               <div className="text-center">
                 <div className="text-sm text-muted-foreground mb-1">Net Income</div>
@@ -654,7 +845,7 @@ export default function DSRCalculator({ language = 'en' }: DSRCalculatorProps) {
                       <div className="flex items-center gap-2 text-sm">
                         <CheckCircle className="w-4 h-4 text-green-500" />
                         <span>
-                          {employmentType === 'self_employed' 
+                          {employmentType === 'self_employed'
                             ? `Self-employed income recognition: ${(bank.selfEmployedRate * 100).toFixed(0)}%`
                             : 'Standard income recognition'}
                         </span>

@@ -29,16 +29,28 @@
 
 ### 5️⃣ 按钮系统
 ```tsx
-// 主按钮（唯一使用紫色）
-<button className="bg-purple-600 hover:bg-purple-500 text-white px-8 py-3">
+// 主按钮（白色背景）
+<button className="btn-xai-primary">
   立即开始
 </button>
 
-// 次要按钮（纯黑白）
-<button className="bg-transparent border border-zinc-700 hover:border-zinc-500 text-white px-8 py-3">
+// 桃红色填充按钮（桃红色背景 + 莹白色字样 + 莹白色描边）
+<button className="btn-pink-filled">
+  主要操作
+</button>
+
+// 桃红色轮廓按钮（黑背景 + 莹白色字样 + 桃红色描边）
+<button className="btn-pink-outline">
+  次要操作
+</button>
+
+// 标准按钮（纯黑白）
+<button className="btn-xai">
   了解更多
 </button>
 ```
+
+**桃红色按钮颜色**: `#FF007F`
 
 ### 6️⃣ 图标系统
 - 使用 Lucide React 线条图标
