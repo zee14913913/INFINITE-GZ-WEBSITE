@@ -16,9 +16,28 @@ export default function CreditPilotPage() {
         <Header />
         
         {/* Hero Section */}
-        <section className="relative pb-px">
-          <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl flex h-full flex-col">
-            <div className="relative z-20 mt-20 flex h-full w-full items-center">
+        <section className="relative pb-px min-h-screen">
+          {/* Video Background - z-0 */}
+          <div className="absolute inset-0 z-0 overflow-hidden bg-black">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="w-full h-full object-cover opacity-50"
+            >
+              <source src="/videos/creditpilot-hero-bg.mp4" type="video/mp4" />
+              您的浏览器不支持视频播放
+            </video>
+          </div>
+          
+          {/* Gradient Overlay - z-10 轻微底部渐变 */}
+          <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/10 via-transparent to-black/50"></div>
+
+          {/* Content - z-20 */}
+          <div className="relative z-20 mx-auto w-full px-4 lg:px-6 xl:max-w-7xl flex min-h-screen flex-col justify-center">
+            <div className="relative z-20 flex w-full items-center">
               <hgroup className="space-y-8">
                 <div className="mono-tag text-secondary text-sm">
                   [ {t.creditpilot.hero.tag} ]
@@ -45,29 +64,11 @@ export default function CreditPilotPage() {
                 </div>
               </hgroup>
             </div>
-            
-            <div className="relative z-10 flex items-end justify-between gap-6 pb-4 pt-4 lg:min-h-[160px] lg:py-10">
-              <div>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="my-2 size-6">
-                  <path fillRule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v16.19l6.22-6.22a.75.75 0 1 1 1.06 1.06l-7.5 7.5a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 1 1 1.06-1.06l6.22 6.22V3a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="flex flex-col items-end gap-6 sm:gap-8 md:flex-row lg:gap-12">
-                <div className="flex flex-col items-end gap-3 sm:flex-row">
-                  <Link 
-                    href="#features" 
-                    className="relative isolate inline-flex shrink-0 items-center justify-center border font-mono text-base/6 uppercase tracking-widest gap-x-3 px-4 py-2 sm:text-sm border-[--btn-border] bg-[--btn-bg] text-[--btn-text] hover:bg-[--btn-hover] rounded-full [--btn-bg:transparent] [--btn-border:theme(colors.primary/25%)] [--btn-hover:theme(colors.secondary/20%)] [--btn-text:theme(colors.primary)]"
-                  >
-                    <span>{t.common.learnMore}</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
+          </div>
           
-      {/* 底部激光分隔线 */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <div className="laser-divider"></div>
-      </div>
+          {/* 底部激光分隔线 */}
+          <div className="absolute bottom-0 left-0 right-0 z-30">
+            <div className="laser-divider"></div>
           </div>
         </section>
 
