@@ -8,13 +8,13 @@ import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function AdvisoryPage() {
   const { t } = useLanguage()
-  
+
   return (
     <>
       <ScrollProgress />
       <main className="min-h-screen bg-[rgb(10,10,10)]">
         <Header />
-        
+
         {/* Hero Section */}
         <section className="relative pb-px min-h-screen">
           <div className="mx-auto w-full px-4 lg:px-6 xl:max-w-7xl flex min-h-screen flex-col justify-center">
@@ -22,31 +22,31 @@ export default function AdvisoryPage() {
               <div className="mono-tag text-secondary text-sm">
                 [ {t.advisory.hero.tag} ]
               </div>
-              
+
               <h1 className="text-primary mx-auto max-w-4xl text-balance text-5xl leading-tight tracking-tight md:text-7xl md:leading-tight lg:text-8xl lg:leading-tight">
                 {t.advisory.hero.title}
               </h1>
-              
+
               <p className="text-secondary mx-auto max-w-3xl text-lg md:text-xl leading-relaxed">
                 {t.advisory.hero.description}
               </p>
-              
+
               <div className="flex flex-wrap items-center justify-center gap-4 pt-8">
-                <Link 
-                  href="https://portal.infinitegz.com/advisory" 
+                <Link
+                  href="https://portal.infinitegz.com/advisory"
                   className="relative isolate inline-flex shrink-0 items-center justify-center border font-mono text-base/6 uppercase tracking-widest gap-x-3 px-6 py-3 sm:text-sm border-[--btn-border] bg-[--btn-bg] text-[--btn-text] hover:border-[--btn-hover] hover:bg-[--btn-hover] rounded-full [--btn-bg:theme(colors.primary)] [--btn-border:theme(colors.primary)] [--btn-hover:theme(colors.primary/80%)] [--btn-text:theme(colors.background)]"
                 >
                   <span>{t.common.bookConsultation}</span>
                 </Link>
-                <Link 
-                  href="https://wa.me/60123456789" 
+                <Link
+                  href="https://wa.me/60123456789"
                   className="relative isolate inline-flex shrink-0 items-center justify-center border font-mono text-base/6 uppercase tracking-widest gap-x-3 px-6 py-3 sm:text-sm border-[--btn-border] bg-[--btn-bg] text-[--btn-text] hover:bg-[--btn-hover] rounded-full [--btn-bg:transparent] [--btn-border:theme(colors.primary/25%)] [--btn-hover:theme(colors.secondary/20%)] [--btn-text:theme(colors.primary)]"
                 >
                   <span>{t.common.whatsappUs}</span>
                 </Link>
               </div>
             </div>
-          
+
       {/* 底部激光分隔线 */}
       <div className="absolute bottom-0 left-0 right-0">
         <div className="laser-divider"></div>
@@ -68,7 +68,7 @@ export default function AdvisoryPage() {
 
             <div className="grid lg:grid-cols-3 gap-px bg-border">
               {t.advisory.services.items.map((service, index) => (
-                <div 
+                <div
                   key={index}
                   className="group relative flex h-full flex-col space-y-4 p-8 bg-background from-secondary/10 via-transparent to-transparent hover:bg-gradient-to-b transition-all"
                 >
@@ -78,22 +78,26 @@ export default function AdvisoryPage() {
                     <div className="bg-primary absolute -bottom-1 -left-1 z-10 size-2 -translate-x-px translate-y-px"></div>
                     <div className="bg-primary absolute -bottom-1 -right-1 z-10 size-2 translate-x-px translate-y-px"></div>
                   </div>
-                  
+
                   <div className="mono-tag text-xs text-secondary relative z-20">
                     {service.num}
                   </div>
-                  
+
                   <h3 className="text-2xl text-primary group-hover:text-primary/90 transition-colors relative z-20">
                     {service.title}
                   </h3>
-                  
+
                   <p className="text-secondary text-sm leading-relaxed group-hover:text-primary/80 transition-colors relative z-20">
                     {service.description}
                   </p>
                 </div>
               ))}
+              {/* 填充空白位置 - 墨黑色背景 */}
+              {t.advisory.services.items.length % 3 !== 0 && (
+                <div className="bg-[rgb(10,10,10)]"></div>
+              )}
             </div>
-          
+
       {/* 底部激光分隔线 */}
       <div className="absolute bottom-0 left-0 right-0">
         <div className="laser-divider"></div>
@@ -122,7 +126,7 @@ export default function AdvisoryPage() {
                 </div>
               ))}
             </div>
-          
+
       {/* 底部激光分隔线 */}
       <div className="absolute bottom-0 left-0 right-0">
         <div className="laser-divider"></div>
@@ -141,21 +145,21 @@ export default function AdvisoryPage() {
                 {t.advisory.cta.description}
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-                <Link 
-                  href="https://portal.infinitegz.com/advisory" 
+                <Link
+                  href="https://portal.infinitegz.com/advisory"
                   className="relative isolate inline-flex shrink-0 items-center justify-center border font-mono text-base/6 uppercase tracking-widest gap-x-3 px-6 py-3 sm:text-sm border-[--btn-border] bg-[--btn-bg] text-[--btn-text] hover:border-[--btn-hover] hover:bg-[--btn-hover] rounded-full [--btn-bg:theme(colors.primary)] [--btn-border:theme(colors.primary)] [--btn-hover:theme(colors.primary/80%)] [--btn-text:theme(colors.background)]"
                 >
                   <span>{t.common.bookConsultation}</span>
                 </Link>
-                <Link 
-                  href="https://wa.me/60123456789" 
+                <Link
+                  href="https://wa.me/60123456789"
                   className="relative isolate inline-flex shrink-0 items-center justify-center border font-mono text-base/6 uppercase tracking-widest gap-x-3 px-6 py-3 sm:text-sm border-[--btn-border] bg-[--btn-bg] text-[--btn-text] hover:bg-[--btn-hover] rounded-full [--btn-bg:transparent] [--btn-border:theme(colors.primary/25%)] [--btn-hover:theme(colors.secondary/20%)] [--btn-text:theme(colors.primary)]"
                 >
                   <span>{t.common.whatsappUs}</span>
                 </Link>
               </div>
             </div>
-          
+
       {/* 底部激光分隔线 */}
       <div className="absolute bottom-0 left-0 right-0">
         <div className="laser-divider"></div>
